@@ -4,7 +4,7 @@ class Home  extends Component {
     render () {
       return(
         <div className={'container'}>
-            这是home页面
+            这是home页面!
         </div>
       );
     }
