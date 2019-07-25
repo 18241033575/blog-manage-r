@@ -31,10 +31,10 @@ function App() {
                     <div className={'con_top_nav'}>
                         <ul>
                             <li><a href="/" className={'active'}>BLOG</a></li>
-                            <li><a href="/" className={'iconfont icon-icon-xinfeng'}>123</a></li>
-                            <li><a href="/" className={'iconfont icon-bianji'}>123</a></li>
-                            <li><a href="/" className={'iconfont icon-tixing'}>123</a></li>
-                            <li><a href="/" className={'iconfont icon-renzhengshenhe_huaban'}>123</a></li>
+                            <li><a href="/">123</a></li>
+                            <li><a href="/">123</a></li>
+                            <li><a href="/">123</a></li>
+                            <li><a href="/">123</a></li>
                         </ul>
                     </div>
                     <div className="show_con">
