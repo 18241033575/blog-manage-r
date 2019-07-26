@@ -31,7 +31,7 @@ function App() {
                     <div className={'con_top_nav'}>
                         <ul>
                             <li><a href="/" className={'active'}>BLOG</a></li>
-                            <li><a href="/">123</a></li>
+                            <li><a href="/" className={''}>123</a></li>
                             <li><a href="/">123</a></li>
                             <li><a href="/">123</a></li>
                             <li><a href="/">123</a></li>
