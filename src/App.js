@@ -10,6 +10,7 @@ import Home from "./components/Home/Home";
 import Line from "./components/Line/Line";
 import Note404 from "./components/Note404/Note404";
 import Circle from "./components/Circle/Circle";
+import Test from "./components/RouterText/RouterText";
 
 function App() {
     return (
@@ -23,7 +24,8 @@ function App() {
                         <ul>
                             <li><NavLink exact activeClassName={'nav_active'} to="/">首页</NavLink></li>
                             <li><NavLink activeClassName={'nav_active'} to="/line">第二页</NavLink></li>
-                            <li><NavLink activeClassName={'nav_active'} to="/circle">第三页</NavLink></li>
+                            {/*<li><NavLink activeClassName={'nav_active'} to="circle">第三页</NavLink></li>*/}
+                            <li><NavLink activeClassName={'nav_active'} to="/test/circle">测试页</NavLink></li>
                         </ul>
                     </div>
                 </div>
@@ -42,6 +44,7 @@ function App() {
                             <Route exact path={'/'} component={Home}/>
                             <Route path={'/line'} component={Line}/>
                             <Route path={'/circle'} component={Circle}/>
+                            <Route path={'/test/circle'} component={Test}/>
                             <Route component={Note404} />
                         </Switch>
                     </div>
