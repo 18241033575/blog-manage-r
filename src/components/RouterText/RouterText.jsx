@@ -7,7 +7,7 @@ class Test  extends Component {
     render () {
       return(
         <div>
-            <NavLink to="/circle">测试呀</NavLink>
+            <NavLink to="/circle">测试呀!!!</NavLink>
         </div>
       );
     }

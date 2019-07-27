@@ -69,6 +69,3 @@ li{
     height: calc( 100vh - 60px);
     overflow: hidden;
 }
-.menu .aside_nav li .nav_active{
-    color: #ff0000;
-}
