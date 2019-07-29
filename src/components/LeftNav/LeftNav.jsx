@@ -12,9 +12,12 @@ class LeftNav  extends Component {
               </div>
               <div className="aside_nav">
                   <ul>
-                      <li><NavLink exact activeClassName={'nav_active'} to="/"><i className={'iconfont icon-home'}></i>首页</NavLink></li>
-                      <li><NavLink activeClassName={'nav_active'} to="/line">文章管理</NavLink></li>
-                      <li><NavLink activeClassName={'nav_active'} to="/circle">评论列表</NavLink></li>
+                      <li><NavLink exact activeClassName={'nav_active'} to="/"><i className={'iconfont icon-home'} />首页</NavLink></li>
+                      <li><NavLink activeClassName={'nav_active'} to="/line"><i className={'iconfont icon-wenzhangliebiaoxiangqing'} />文章管理</NavLink></li>
+                      <li><NavLink activeClassName={'nav_active'} to="/settings"><i className={'iconfont icon-setting'} />权限设置</NavLink></li>
+                      <li><NavLink activeClassName={'nav_active'} to="/circle"><i className={'iconfont icon-navicon-wzgl'} />评论列表</NavLink></li>
+                      <li><NavLink activeClassName={'nav_active'} to="/circle"><i className={'iconfont icon-home'} />评论列表</NavLink></li>
+                      <li><NavLink activeClassName={'nav_active'} to="/circle">自定义滚动条</NavLink></li>
                       {/*<li><NavLink activeClassName={'nav_active'} to="/test/circle">测试页</NavLink></li>*/}
                   </ul>
               </div>

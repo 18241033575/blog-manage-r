@@ -1,7 +1,10 @@
 .menu .aside_nav li a{
+    display: inline-block;
+    width: 100%;
+    height: 100%;
     color: #676a6c;
 }
-.menu .aside_nav li a:hover{
+.menu .aside_nav li:hover a{
     color: #fff;
 }
 .menu .aside_nav li .nav_active{

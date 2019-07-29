@@ -39,11 +39,23 @@ li{
     vertical-align: middle;
 }
 .menu .aside_nav{
-    text-align: center;
+    height: calc( 100vh - 60px);
+    overflow-y: auto;
 }
+.aside_nav::-webkit-scrollbar{
+    width: 0;
+}
+/*.menu .aside_nav ul{
+    overflow-y: scroll;
+}*/
 .menu .aside_nav li{
+    margin: 0 auto;
+    width: 80%;
     line-height: 48px;
     cursor: pointer;
+}
+.menu .aside_nav li i{
+    margin-right: 10px;
 }
 .content{
     width: calc(100vw - 240px);
