@@ -1,6 +1,9 @@
+.menu .aside_nav li a{
+    color: #676a6c;
+}
 .menu .aside_nav li a:hover{
-    color: #58e621;
+    color: #fff;
 }
 .menu .aside_nav li .nav_active{
-    color: #ff0000;
+    color: #fff;
 }
