@@ -14,12 +14,10 @@ class TopBar  extends Component {
       return(
           <div className={'content'}>
               <div className={'con_top_nav'}>
+                  <img src={('../../static/img/React.png')} alt=""/><span>菜单</span>
                   <ul>
-                      <li><a href="/" className={'active'}>BLOG</a></li>
-                      <li><a href="/" className={''}>123</a></li>
-                      <li><a href="/">123</a></li>
-                      <li><a href="/">123</a></li>
-                      <li><a href="/">123</a></li>
+                      <li><a href="/" className={'active'}><i className={'iconfont icon-tixing'} /><span>待办工作</span></a></li>
+                      <li><img src={('../../static/img/React.png')}  alt=""/><span>名字</span></li>
                   </ul>
               </div>
               <div className="show_con">
