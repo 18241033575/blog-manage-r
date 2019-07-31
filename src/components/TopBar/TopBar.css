@@ -1,0 +1,38 @@
+
+.content{
+  width: calc(100vw - 240px);
+  height: 100%;
+}
+.con_top_nav{
+  display: flex;
+  justify-content: flex-end;
+  height: 60px;
+  background-color: #f3f3f4;
+}
+.con_top_nav ul{
+  display: inherit;
+  align-items: center;
+
+}
+.con_top_nav ul li{
+  margin-right: 15px;
+  height: 26px;
+  line-height: 26px;
+  text-align: center;
+  font-size: 14px;
+}
+.con_top_nav ul li a{
+  color: #666;
+  cursor: pointer;
+}
+.con_top_nav ul li .active{
+  font-size: 12px;
+}
+.container{
+  height: calc( 100vh - 60px);
+  overflow: hidden;
+}
+.show_con{
+  width: 100%;
+  height: 100%;
+}

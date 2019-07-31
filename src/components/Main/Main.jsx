@@ -4,6 +4,8 @@ import {
 } from 'react-router-dom'
 import TopBar from "../TopBar/TopBar";
 import LeftNav from "../LeftNav/LeftNav"
+import "./Main.css"
+
 
 class Main  extends Component {
     render () {

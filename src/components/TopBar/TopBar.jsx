@@ -9,6 +9,8 @@ import Note404 from "../Note404/Note404";
 import Home from "../Home/Home";
 import Circle from "../Circle/Circle";
 
+import "./TopBar.css"
+
 class TopBar  extends Component {
     render () {
       return(

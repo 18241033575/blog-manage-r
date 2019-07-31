@@ -1,7 +1,8 @@
 import React from 'react';
 
-import "./static/css/index.less"
 import Main from "./components/Main/Main"
+
+import "./static/css/index.css"
 
 function App() {
     return (
