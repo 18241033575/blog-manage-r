@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react';
+import ParticleBg from '../ParticleBg/ParticleBg'
 
 import { Input, Button } from 'antd';
 
@@ -33,6 +34,7 @@ class Login  extends PureComponent {
                     <p><span>密码:</span>admin</p>
                 </div>
             </div>
+            <ParticleBg/>
         </div>
       );
     }
