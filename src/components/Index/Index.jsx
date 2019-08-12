@@ -1,11 +1,19 @@
 import React, {Component} from 'react';
 import {
     BrowserRouter as Router,
+    NavLink,
+    Switch,
+    Route
 } from 'react-router-dom'
 
 import {Layout, Menu, Breadcrumb, Icon} from 'antd';
 import Login from '../Login/Login'
 import './Index.css'
+import Home from "../Home/Home";
+import Test from "../RouterText/RouterText";
+import Line from "../Line/Line";
+import Circle from "../Circle/Circle";
+import Note404 from "../Note404/Note404";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -30,7 +38,6 @@ class Index extends Component {
     };
 
     onCollapse = collapsed => {
-        console.log(collapsed);
         this.setState({collapsed});
     };
 
@@ -47,12 +54,16 @@ class Index extends Component {
                                     </div>
                                     <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                                         <Menu.Item key="1">
-                                            <Icon type="pie-chart"/>
-                                            <span>Option 1</span>
+                                            <NavLink exact to={'/'}>
+                                                <Icon type="home"/>
+                                                <span>首页</span>
+                                            </NavLink>
                                         </Menu.Item>
                                         <Menu.Item key="2">
-                                            <Icon type="desktop"/>
-                                            <span>Option 2</span>
+                                            <NavLink exact to={'/settings'}>
+                                                <Icon type="desktop"/>
+                                                <span>权限设置</span>
+                                            </NavLink>
                                         </Menu.Item>
                                         <SubMenu
                                             key="sub1"
@@ -92,10 +103,17 @@ class Index extends Component {
                                             <Breadcrumb.Item>User</Breadcrumb.Item>
                                             <Breadcrumb.Item>Bill</Breadcrumb.Item>
                                         </Breadcrumb>
-                                        <div style={{padding: 24, background: '#fff', minHeight: 360}}>Bill is a cat.
+                                        <div style={{padding: 24, background: '#fff', minHeight: 360}}>
+                                            <Switch>
+                                                <Route exact path={'/'} component={Home}/>
+                                                <Route path={'/setting'} component={Line}/>
+                                                <Route path={'/circle'} component={Circle}/>
+                                                <Route path={'/test/circle'} component={Test}/>
+                                                <Route component={Note404}/>
+                                            </Switch>
                                         </div>
                                     </Content>
-                                    <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>
+                                    <Footer style={{textAlign: 'center'}}>Blog Manage ©2018 Created by Jayshi</Footer>
                                 </Layout>
                             </Layout>
                         </div>
