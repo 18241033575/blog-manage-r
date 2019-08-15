@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import RadarImg from '../ReactChart/radar'
-import DoughnutImg from "../ReactChart/doughnut";
+import DoughnutImg from '../ReactChart/doughnut';
 // import {Bar} from 'react-chartjs-2';
+
+import './Home.css'
 
 // const data = {
 //     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -26,8 +28,12 @@ class Home  extends Component {
       return(
         <div className={'container'}>
             <div className="chart">
-                <RadarImg />
-                <DoughnutImg />
+                <div className="radar part">
+                    <RadarImg />
+                </div>
+                <div className="part">
+                    <DoughnutImg />
+                </div>
             </div>
         </div>
       );
