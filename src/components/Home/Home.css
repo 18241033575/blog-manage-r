@@ -1,8 +1,8 @@
-/*.chart{*/
-    /*display: flex;*/
-    /*width: 100%;*/
-    /*text-align: center;*/
-/*}*/
-/*.part{*/
-    /*width: 50%;*/
-/*}*/
+.chart{
+    /*display: inline-block;*/
+}
+.part{
+    float: left;
+    width: 50%;
+    text-align: center;
+}

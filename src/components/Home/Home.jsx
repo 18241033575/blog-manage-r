@@ -1,9 +1,18 @@
 import React, {Component} from 'react';
+import { Card } from 'antd';
+
 import RadarImg from '../ReactChart/radar'
 import DoughnutImg from '../ReactChart/doughnut';
-// import {Bar} from 'react-chartjs-2';
+import HomeList from "../HomeList/HomeList";
 
 import './Home.css'
+import CountDown from "../CountDown/UnCount";
+import Statis from "../Statistic/Statistic";
+
+// import {Bar} from 'react-chartjs-2';
+const { Meta } = Card;
+
+
 
 // const data = {
 //     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -35,8 +44,20 @@ class Home  extends Component {
                     <DoughnutImg />
                 </div>
             </div>
+            {/*<Card*/}
+                {/*hoverable*/}
+                {/*style={{ width: 240 }}*/}
+                {/*cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}*/}
+            {/*>*/}
+                {/*<Meta title="Europe Street beat" description="www.instagram.com" />*/}
+            {/*</Card>*/}
+            <HomeList />
+            <CountDown />
+            <Statis />
         </div>
       );
     }
 }
 export default Home
+
+

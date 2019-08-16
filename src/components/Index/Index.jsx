@@ -11,9 +11,10 @@ import Login from '../Login/Login'
 import './Index.css'
 import Home from "../Home/Home";
 import Test from "../RouterText/RouterText";
-import Line from "../Line/Line";
+// import Line from "../Line/Line";
 import Circle from "../Circle/Circle";
 import Note404 from "../Note404/Note404";
+import Setting from "../Setting/Setting";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -54,13 +55,13 @@ class Index extends Component {
                                     </div>
                                     <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                                         <Menu.Item key="1">
-                                            <NavLink exact to={'/'}>
+                                            <NavLink  exact to={'/'}>
                                                 <Icon type="home"/>
                                                 <span>首页</span>
                                             </NavLink>
                                         </Menu.Item>
                                         <Menu.Item key="2">
-                                            <NavLink exact to={'/settings'}>
+                                            <NavLink activeClassName={'ant-menu-item-selected'} exact to={'/settings'}>
                                                 <Icon type="desktop"/>
                                                 <span>权限设置</span>
                                             </NavLink>
@@ -106,14 +107,14 @@ class Index extends Component {
                                         <div style={{padding: 24, background: '#fff', minHeight: 360}}>
                                             <Switch>
                                                 <Route exact path={'/'} component={Home}/>
-                                                <Route path={'/setting'} component={Line}/>
+                                                <Route path={'/setting'} component={Setting}/>
                                                 <Route path={'/circle'} component={Circle}/>
                                                 <Route path={'/test/circle'} component={Test}/>
                                                 <Route component={Note404}/>
                                             </Switch>
                                         </div>
                                     </Content>
-                                    <Footer style={{textAlign: 'center'}}>Blog Manage ©2018 Created by Jayshi</Footer>
+                                    <Footer style={{textAlign: 'center'}}>Blog Manage ©2019 Created by Jayshi</Footer>
                                 </Layout>
                             </Layout>
                         </div>
