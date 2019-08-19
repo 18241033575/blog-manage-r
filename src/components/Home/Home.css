@@ -1,8 +1,9 @@
 .chart{
-    /*display: inline-block;*/
+    display: inline-block;
 }
 .part{
     float: left;
+    margin-top: 20px;
     width: 50%;
     text-align: center;
 }

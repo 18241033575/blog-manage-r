@@ -43,17 +43,16 @@ class Home  extends Component {
                 <div className="part">
                     <DoughnutImg />
                 </div>
+                <div className="part">
+                    <HomeList />
+                </div>
+                <div className="part">
+                    <CountDown />
+                </div>
+                <div className="part">
+                    <Statis />
+                </div>
             </div>
-            {/*<Card*/}
-                {/*hoverable*/}
-                {/*style={{ width: 240 }}*/}
-                {/*cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}*/}
-            {/*>*/}
-                {/*<Meta title="Europe Street beat" description="www.instagram.com" />*/}
-            {/*</Card>*/}
-            <HomeList />
-            <CountDown />
-            <Statis />
         </div>
       );
     }

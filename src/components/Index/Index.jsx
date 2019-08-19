@@ -15,6 +15,7 @@ import Test from "../RouterText/RouterText";
 import Circle from "../Circle/Circle";
 import Note404 from "../Note404/Note404";
 import Setting from "../Setting/Setting";
+import NetUser from "../NetUser/NetUser";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -60,41 +61,104 @@ class Index extends Component {
                                                 <span>首页</span>
                                             </NavLink>
                                         </Menu.Item>
-                                        <Menu.Item key="2">
-                                            <NavLink activeClassName={'ant-menu-item-selected'} exact to={'/settings'}>
-                                                <Icon type="desktop"/>
-                                                <span>权限设置</span>
-                                            </NavLink>
-                                        </Menu.Item>
                                         <SubMenu
                                             key="sub1"
                                             title={
                                                 <span>
-                                                  <Icon type="user"/>
-                                                  <span>User</span>
+                                                  <Icon type="appstore"/>
+                                                  <span>应用</span>
                                                 </span>
                                             }
                                         >
-                                            <Menu.Item key="3">Tom</Menu.Item>
-                                            <Menu.Item key="4">Bill</Menu.Item>
-                                            <Menu.Item key="5">Alex</Menu.Item>
+                                            <SubMenu
+                                                key="sub2"
+                                                title={
+                                                    <span>
+                                                  <Icon type="file-protect"/>
+                                                  <span>内容系统</span>
+                                                </span>
+                                                }
+                                            >
+                                                <Menu.Item key="2">文章列表</Menu.Item>
+                                                <Menu.Item key="3">分类管理</Menu.Item>
+                                                <Menu.Item key="4">评论管理</Menu.Item>
+                                            </SubMenu>
+                                            <SubMenu
+                                                key="sub3"
+                                                title={
+                                                    <span>
+                                                  <Icon type="solution"/>
+                                                  <span>社区系统</span>
+                                                </span>
+                                                }
+                                            >
+                                                <Menu.Item key="5">帖子列表</Menu.Item>
+                                                <Menu.Item key="6">回帖列表</Menu.Item>
+                                            </SubMenu>
+                                            <Menu.Item key="7">消息中心</Menu.Item>
                                         </SubMenu>
                                         <SubMenu
-                                            key="sub2"
+                                            key="sub4"
                                             title={
                                                 <span>
-                                                  <Icon type="team"/>
-                                                  <span>Team</span>
+                                                  <Icon type="user"/>
+                                                  <span>用户</span>
                                                 </span>
                                             }
                                         >
-                                            <Menu.Item key="6">Team 1</Menu.Item>
-                                            <Menu.Item key="8">Team 2</Menu.Item>
+                                            <Menu.Item key="8">
+                                                <NavLink  exact to={'/netuser'}>
+                                                    网站用户
+                                                </NavLink>
+                                            </Menu.Item>
+                                            <Menu.Item key="9">后台管理员</Menu.Item>
+                                            <Menu.Item key="10">角色管理</Menu.Item>
                                         </SubMenu>
-                                        <Menu.Item key="9">
-                                            <Icon type="file"/>
-                                            <span>File</span>
-                                        </Menu.Item>
+                                        <SubMenu
+                                            key="sub5"
+                                            title={
+                                                <span>
+                                                  <Icon type="setting"/>
+                                                  <span>设置</span>
+                                                </span>
+                                            }
+                                        >
+                                            <SubMenu
+                                                key="sub6"
+                                                title={
+                                                    <span>
+                                                 <Icon type="radar-chart" />
+                                                  <span>系统设置</span>
+                                                </span>
+                                                }
+                                            >
+                                                <Menu.Item key="11">网站设置</Menu.Item>
+                                            </SubMenu>
+                                            <SubMenu
+                                                key="sub7"
+                                                title={
+                                                    <span>
+                                                  <Icon type="heat-map" />
+                                                  <span>我的设置</span>
+                                                </span>
+                                                }
+                                            >
+                                                <Menu.Item key="12">基本资料</Menu.Item>
+                                                <Menu.Item key="13">修改密码</Menu.Item>
+                                            </SubMenu>
+                                        </SubMenu>
+                                        <SubMenu
+                                            key="sub8"
+                                            title={
+                                                <span>
+                                                  <Icon type="crown"/>
+                                                  <span>其他</span>
+                                                </span>
+                                            }
+                                        >
+                                            <Menu.Item key="14"><span>免责声明</span></Menu.Item>
+                                            <Menu.Item key="15"><span>个人信息</span></Menu.Item>
+                                        </SubMenu>
                                     </Menu>
                                 </Sider>
                                 <Layout>
@@ -109,6 +173,7 @@ class Index extends Component {
                                                 <Route exact path={'/'} component={Home}/>
                                                 <Route path={'/setting'} component={Setting}/>
                                                 <Route path={'/circle'} component={Circle}/>
+                                                <Route path={'/netuser'} component={NetUser}/>
                                                 <Route path={'/test/circle'} component={Test}/>
                                                 <Route component={Note404}/>
                                             </Switch>
