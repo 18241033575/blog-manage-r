@@ -18,6 +18,7 @@ import Setting from "../Setting/Setting";
 import NetUser from "../NetUser/NetUser";
 import NewsCenter from "../NewsCenter/NewsCenter";
 import CategorySysterm from "../CategorySysterm/CategorySysterm";
+import { fetchUrl } from 'fetch';
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -35,6 +36,19 @@ class Index extends Component {
         // 处理思路：拿到账号和密码请求后台，通过给登录状态
         let userInfo = localStorage.getItem('USER');
         userInfo ? this.setState({isLogin: true}) : this.setState({isLogin: false});
+    }
+    componentDidMount(){
+        const url = "http://localhost:4000";
+        console.log(fetchUrl);
+        fetchUrl(url,{
+            method: 'GET',
+            mode:"cors",
+            headers: {
+                'content-type': 'application/json'
+            }
+        },(res)=>{
+            console.log(res);
+        })
     }
 
     state = {
