@@ -16,6 +16,8 @@ import Circle from "../Circle/Circle";
 import Note404 from "../Note404/Note404";
 import Setting from "../Setting/Setting";
 import NetUser from "../NetUser/NetUser";
+import NewsCenter from "../NewsCenter/NewsCenter";
+import CategorySysterm from "../CategorySysterm/CategorySysterm";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -80,7 +82,11 @@ class Index extends Component {
                                                 }
                                             >
                                                 <Menu.Item key="2">文章列表</Menu.Item>
-                                                <Menu.Item key="3">分类管理</Menu.Item>
+                                                <Menu.Item key="3">
+                                                    <NavLink exact to={'/category'}>
+                                                        分类管理
+                                                    </NavLink>
+                                                </Menu.Item>
                                                 <Menu.Item key="4">评论管理</Menu.Item>
                                             </SubMenu>
                                             <SubMenu
@@ -95,7 +101,11 @@ class Index extends Component {
                                                 <Menu.Item key="5">帖子列表</Menu.Item>
                                                 <Menu.Item key="6">回帖列表</Menu.Item>
                                             </SubMenu>
-                                            <Menu.Item key="7">消息中心</Menu.Item>
+                                            <Menu.Item key="7">
+                                                <NavLink exact to={'/news'}>
+                                                    消息中心
+                                                </NavLink>
+                                            </Menu.Item>
                                         </SubMenu>
                                         <SubMenu
                                             key="sub4"
@@ -173,6 +183,8 @@ class Index extends Component {
                                                 <Route exact path={'/'} component={Home}/>
                                                 <Route path={'/setting'} component={Setting}/>
                                                 <Route path={'/circle'} component={Circle}/>
+                                                <Route path={'/category'} component={CategorySysterm}/>
+                                                <Route path={'/news'} component={NewsCenter}/>
                                                 <Route path={'/netuser'} component={NetUser}/>
                                                 <Route path={'/test/circle'} component={Test}/>
                                                 <Route component={Note404}/>
