@@ -10,15 +10,16 @@ import {Layout, Menu, Breadcrumb, Icon} from 'antd';
 import Login from '../Login/Login'
 import './Index.css'
 import Home from "../Home/Home";
-import Test from "../RouterText/RouterText";
-// import Line from "../Line/Line";
-import Circle from "../Circle/Circle";
 import Note404 from "../Note404/Note404";
-import Setting from "../Setting/Setting";
 import NetUser from "../NetUser/NetUser";
 import NewsCenter from "../NewsCenter/NewsCenter";
 import CategorySysterm from "../CategorySysterm/CategorySysterm";
-import { fetchUrl } from 'fetch';
+import ArticleList from "../ArticleList/ArticleList";
+import CommentManage from "../CommentManage/CommentManage";
+import Administor from "../Administor/Administor";
+import Schedule from "../Schedule/Schedule";
+import NetSetting from "../NetSetting/NetSetting";
+import ChangePassword from "../ChangePassword/ChangePassword";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -37,24 +38,25 @@ class Index extends Component {
         let userInfo = localStorage.getItem('USER');
         userInfo ? this.setState({isLogin: true}) : this.setState({isLogin: false});
     }
-    componentDidMount(){
-        const url = "http://localhost:4000";
-        console.log(fetchUrl);
-        fetchUrl(url,{
+
+    componentDidMount() {
+        const url = "https://api.github.com/events";
+        fetch(url, {
             method: 'GET',
-            mode:"cors",
-            headers: {
-                'content-type': 'application/json'
-            }
-        },(res)=>{
-            console.log(res);
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(err => {
+            console.log(err);
         })
     }
 
     state = {
-        collapsed: false,
+        collapsed: false
     };
-
+    // 只展开当前导航
     onCollapse = collapsed => {
         this.setState({collapsed});
     };
@@ -70,9 +72,13 @@ class Index extends Component {
                                     <div className="logo">
                                         <img src={require('../../static/img/logo.jpg')} alt="logo"/>
                                     </div>
-                                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+                                    <Menu
+                                        theme="dark"
+                                        defaultSelectedKeys={['1']}
+                                        mode="inline"
+                                    >
                                         <Menu.Item key="1">
-                                            <NavLink  exact to={'/'}>
+                                            <NavLink exact to={'/'}>
                                                 <Icon type="home"/>
                                                 <span>首页</span>
                                             </NavLink>
@@ -95,13 +101,21 @@ class Index extends Component {
                                                 </span>
                                                 }
                                             >
-                                                <Menu.Item key="2">文章列表</Menu.Item>
+                                                <Menu.Item key="2">
+                                                    <NavLink exact to={'/article'}>
+                                                        文章列表
+                                                    </NavLink>
+                                                </Menu.Item>
                                                 <Menu.Item key="3">
                                                     <NavLink exact to={'/category'}>
                                                         分类管理
                                                     </NavLink>
                                                 </Menu.Item>
-                                                <Menu.Item key="4">评论管理</Menu.Item>
+                                                <Menu.Item key="4">
+                                                    <NavLink exact to={'/comment'}>
+                                                        评论管理
+                                                    </NavLink>
+                                                </Menu.Item>
                                             </SubMenu>
                                             <SubMenu
                                                 key="sub3"
@@ -131,12 +145,20 @@ class Index extends Component {
                                             }
                                         >
                                             <Menu.Item key="8">
-                                                <NavLink  exact to={'/netuser'}>
+                                                <NavLink exact to={'/netuser'}>
                                                     网站用户
                                                 </NavLink>
                                             </Menu.Item>
-                                            <Menu.Item key="9">后台管理员</Menu.Item>
-                                            <Menu.Item key="10">角色管理</Menu.Item>
+                                            <Menu.Item key="9">
+                                                <NavLink exact to={'/administor'}>
+                                                    后台管理员
+                                                </NavLink>
+                                            </Menu.Item>
+                                            <Menu.Item key="10">
+                                                <NavLink exact to={'/schedule'}>
+                                                    我的日程
+                                                </NavLink>
+                                            </Menu.Item>
                                         </SubMenu>
                                         <SubMenu
                                             key="sub5"
@@ -151,24 +173,32 @@ class Index extends Component {
                                                 key="sub6"
                                                 title={
                                                     <span>
-                                                 <Icon type="radar-chart" />
+                                                 <Icon type="radar-chart"/>
                                                   <span>系统设置</span>
                                                 </span>
                                                 }
                                             >
-                                                <Menu.Item key="11">网站设置</Menu.Item>
+                                                <Menu.Item key="11">
+                                                    <NavLink exact to={'/netsetting'}>
+                                                        网站设置
+                                                    </NavLink>
+                                                </Menu.Item>
                                             </SubMenu>
                                             <SubMenu
                                                 key="sub7"
                                                 title={
                                                     <span>
-                                                  <Icon type="heat-map" />
+                                                  <Icon type="heat-map"/>
                                                   <span>我的设置</span>
                                                 </span>
                                                 }
                                             >
                                                 <Menu.Item key="12">基本资料</Menu.Item>
-                                                <Menu.Item key="13">修改密码</Menu.Item>
+                                                <Menu.Item key="13">
+                                                    <NavLink exact to={'/changepassword'}>
+                                                        修改密码
+                                                    </NavLink>
+                                                </Menu.Item>
                                             </SubMenu>
                                         </SubMenu>
                                         <SubMenu
@@ -195,12 +225,15 @@ class Index extends Component {
                                         <div style={{padding: 24, background: '#fff', minHeight: 360}}>
                                             <Switch>
                                                 <Route exact path={'/'} component={Home}/>
-                                                <Route path={'/setting'} component={Setting}/>
-                                                <Route path={'/circle'} component={Circle}/>
+                                                <Route path={'/comment'} component={CommentManage}/>
+                                                <Route path={'/article'} component={ArticleList}/>
                                                 <Route path={'/category'} component={CategorySysterm}/>
                                                 <Route path={'/news'} component={NewsCenter}/>
                                                 <Route path={'/netuser'} component={NetUser}/>
-                                                <Route path={'/test/circle'} component={Test}/>
+                                                <Route path={'/administor'} component={Administor}/>
+                                                <Route path={'/schedule'} component={Schedule}/>
+                                                <Route path={'/netsetting'} component={NetSetting}/>
+                                                <Route path={'/changepassword'} component={ChangePassword}/>
                                                 <Route component={Note404}/>
                                             </Switch>
                                         </div>
@@ -223,10 +256,4 @@ class Index extends Component {
     }
 }
 
-// ReactDOM.render(<Index/>, mountNode);
-
-
 export default Index
-// ReactDOM.render(
-//
-// );
