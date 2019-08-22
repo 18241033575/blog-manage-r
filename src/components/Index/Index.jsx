@@ -20,6 +20,8 @@ import Administor from "../Administor/Administor";
 import Schedule from "../Schedule/Schedule";
 import NetSetting from "../NetSetting/NetSetting";
 import ChangePassword from "../ChangePassword/ChangePassword";
+import Disclaimer from "../Disclaimer/Disclaimer";
+import BaseMsg from "../BaseMsg/BaseMsg";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -193,7 +195,11 @@ class Index extends Component {
                                                 </span>
                                                 }
                                             >
-                                                <Menu.Item key="12">基本资料</Menu.Item>
+                                                <Menu.Item key="12">
+                                                    <NavLink exact to={'/basemsg'}>
+                                                        基本资料
+                                                    </NavLink>
+                                                </Menu.Item>
                                                 <Menu.Item key="13">
                                                     <NavLink exact to={'/changepassword'}>
                                                         修改密码
@@ -210,7 +216,14 @@ class Index extends Component {
                                                 </span>
                                             }
                                         >
-                                            <Menu.Item key="14"><span>免责声明</span></Menu.Item>
+                                            <Menu.Item key="14">
+                                                <NavLink exact to={'/disclaimer'}>
+                                                    <span>
+                                                      免责声明
+                                                    </span>
+                                                </NavLink>
+
+                                            </Menu.Item>
                                             <Menu.Item key="15"><span>个人信息</span></Menu.Item>
                                         </SubMenu>
                                     </Menu>
@@ -234,6 +247,8 @@ class Index extends Component {
                                                 <Route path={'/schedule'} component={Schedule}/>
                                                 <Route path={'/netsetting'} component={NetSetting}/>
                                                 <Route path={'/changepassword'} component={ChangePassword}/>
+                                                <Route path={'/disclaimer'} component={Disclaimer}/>
+                                                <Route path={'/basemsg'} component={BaseMsg}/>
                                                 <Route component={Note404}/>
                                             </Switch>
                                         </div>
