@@ -31,7 +31,8 @@ class Index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLogin: false
+            isLogin: false,
+            openKeys: []
         }
     }
 
@@ -42,14 +43,23 @@ class Index extends Component {
         userInfo ? this.setState({isLogin: true}) : this.setState({isLogin: false});
     }
 
-    state = {
-        collapsed: false
-    };
-    // 只展开当前导航
-    onCollapse = collapsed => {
-        this.setState({collapsed});
-    };
+    rootSubmenuKeys = ['sub1', 'sub4', 'sub5', 'sub8'];
 
+    onOpenChange = openKeys => {
+        const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
+        if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+            this.setState({ openKeys });
+        } else {
+            this.setState({
+                openKeys: latestOpenKey ? [latestOpenKey] : [],
+            });
+        }
+    };
+    onItem1 = () => {
+        this.setState({
+            openKeys: []
+        })
+    };
     render() {
         return (
             <Router>
@@ -64,9 +74,16 @@ class Index extends Component {
                                     <Menu
                                         theme="dark"
                                         defaultSelectedKeys={['1']}
+                                        defaultOpenKeys={['sub1']}
                                         mode="inline"
+                                        openKeys={this.state.openKeys}
+                                        onOpenChange={this.onOpenChange}
+                                        inlineCollapsed={this.state.collapsed}
                                     >
-                                        <Menu.Item key="1">
+                                        <Menu.Item
+                                            key="1"
+                                            onClick={this.onItem1}
+                                        >
                                             <NavLink exact to={'/'}>
                                                 <Icon type="home"/>
                                                 <span>首页</span>
