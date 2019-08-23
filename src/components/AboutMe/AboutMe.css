@@ -1,0 +1,53 @@
+.about_me{
+    text-align: center;
+}
+.name{
+    font-size: 24px;
+    color: #333333;
+}
+.basmsg{
+    margin: 0 auto;
+    width: 400px;
+    height: 42px;
+}
+.basmsg .part{
+    width: 30%;
+}
+.basmsg i{
+    margin-right: 5px;
+}
+.forme{
+    text-align: left;
+}
+.forme .title{
+    margin: 20px 0;
+    font-size: 18px;
+    color: #333333;
+}
+.me_desc{
+    font-size: 14px;
+    color: #666666;
+    text-indent: 2em;
+    letter-spacing: 1px;
+    line-height: 18px;
+}
+.me_skills span{
+    margin: 10px 10px 0 0;
+    padding: 5px 9px;
+    font-size: 14px;
+    color: #666666;
+    border: 1px solid #EAEAEA;
+    text-align: center;
+}
+.me_skills span:hover{
+    border: 1px solid #59a4d3;
+}
+.forme .money{
+    margin-top: 30px;
+    text-align: center;
+    overflow: hidden;
+}
+.forme .money img{
+    width: 220px;
+    height: 220px;
+}

@@ -6,9 +6,6 @@ import { Input, Button } from 'antd';
 import "./Login.css"
 
 class Login  extends PureComponent {
-    constructor(props){
-        super(props);
-    }
     componentWillMount(){
         this.setState({
             username: '',

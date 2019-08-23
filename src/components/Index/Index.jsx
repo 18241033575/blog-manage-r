@@ -22,6 +22,7 @@ import NetSetting from "../NetSetting/NetSetting";
 import ChangePassword from "../ChangePassword/ChangePassword";
 import Disclaimer from "../Disclaimer/Disclaimer";
 import BaseMsg from "../BaseMsg/BaseMsg";
+import AboutMe from "../AboutMe/AboutMe";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -39,20 +40,6 @@ class Index extends Component {
         // 处理思路：拿到账号和密码请求后台，通过给登录状态
         let userInfo = localStorage.getItem('USER');
         userInfo ? this.setState({isLogin: true}) : this.setState({isLogin: false});
-    }
-
-    componentDidMount() {
-        const url = "https://api.github.com/events";
-        fetch(url, {
-            method: 'GET',
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(err => {
-            console.log(err);
-        })
     }
 
     state = {
@@ -104,17 +91,17 @@ class Index extends Component {
                                                 }
                                             >
                                                 <Menu.Item key="2">
-                                                    <NavLink exact to={'/article'}>
+                                                    <NavLink exact to={'/system/article'}>
                                                         文章列表
                                                     </NavLink>
                                                 </Menu.Item>
                                                 <Menu.Item key="3">
-                                                    <NavLink exact to={'/category'}>
+                                                    <NavLink exact to={'/system/category'}>
                                                         分类管理
                                                     </NavLink>
                                                 </Menu.Item>
                                                 <Menu.Item key="4">
-                                                    <NavLink exact to={'/comment'}>
+                                                    <NavLink exact to={'/system/comment'}>
                                                         评论管理
                                                     </NavLink>
                                                 </Menu.Item>
@@ -132,7 +119,7 @@ class Index extends Component {
                                                 <Menu.Item key="6">回帖列表</Menu.Item>
                                             </SubMenu>
                                             <Menu.Item key="7">
-                                                <NavLink exact to={'/news'}>
+                                                <NavLink exact to={'/system/news'}>
                                                     消息中心
                                                 </NavLink>
                                             </Menu.Item>
@@ -147,17 +134,17 @@ class Index extends Component {
                                             }
                                         >
                                             <Menu.Item key="8">
-                                                <NavLink exact to={'/netuser'}>
+                                                <NavLink exact to={'/user/netuser'}>
                                                     网站用户
                                                 </NavLink>
                                             </Menu.Item>
                                             <Menu.Item key="9">
-                                                <NavLink exact to={'/administor'}>
+                                                <NavLink exact to={'/user/administor'}>
                                                     后台管理员
                                                 </NavLink>
                                             </Menu.Item>
                                             <Menu.Item key="10">
-                                                <NavLink exact to={'/schedule'}>
+                                                <NavLink exact to={'/user/schedule'}>
                                                     我的日程
                                                 </NavLink>
                                             </Menu.Item>
@@ -181,7 +168,7 @@ class Index extends Component {
                                                 }
                                             >
                                                 <Menu.Item key="11">
-                                                    <NavLink exact to={'/netsetting'}>
+                                                    <NavLink exact to={'/setting/netsetting'}>
                                                         网站设置
                                                     </NavLink>
                                                 </Menu.Item>
@@ -196,12 +183,12 @@ class Index extends Component {
                                                 }
                                             >
                                                 <Menu.Item key="12">
-                                                    <NavLink exact to={'/basemsg'}>
+                                                    <NavLink exact to={'/myset/basemsg'}>
                                                         基本资料
                                                     </NavLink>
                                                 </Menu.Item>
                                                 <Menu.Item key="13">
-                                                    <NavLink exact to={'/changepassword'}>
+                                                    <NavLink exact to={'/myset/changepassword'}>
                                                         修改密码
                                                     </NavLink>
                                                 </Menu.Item>
@@ -224,7 +211,11 @@ class Index extends Component {
                                                 </NavLink>
 
                                             </Menu.Item>
-                                            <Menu.Item key="15"><span>个人信息</span></Menu.Item>
+                                            <Menu.Item key="15">
+                                                <NavLink exact to={'/aboutme'}>
+                                                    <span>个人信息</span>
+                                                </NavLink>
+                                            </Menu.Item>
                                         </SubMenu>
                                     </Menu>
                                 </Sider>
@@ -238,17 +229,18 @@ class Index extends Component {
                                         <div style={{padding: 24, background: '#fff', minHeight: 360}}>
                                             <Switch>
                                                 <Route exact path={'/'} component={Home}/>
-                                                <Route path={'/comment'} component={CommentManage}/>
-                                                <Route path={'/article'} component={ArticleList}/>
-                                                <Route path={'/category'} component={CategorySysterm}/>
-                                                <Route path={'/news'} component={NewsCenter}/>
-                                                <Route path={'/netuser'} component={NetUser}/>
-                                                <Route path={'/administor'} component={Administor}/>
-                                                <Route path={'/schedule'} component={Schedule}/>
-                                                <Route path={'/netsetting'} component={NetSetting}/>
-                                                <Route path={'/changepassword'} component={ChangePassword}/>
+                                                <Route path={'/system/comment'} component={CommentManage}/>
+                                                <Route path={'/system/article'} component={ArticleList}/>
+                                                <Route path={'/system/category'} component={CategorySysterm}/>
+                                                <Route path={'/system/news'} component={NewsCenter}/>
+                                                <Route path={'/user/netuser'} component={NetUser}/>
+                                                <Route path={'/user/administor'} component={Administor}/>
+                                                <Route path={'/user/schedule'} component={Schedule}/>
+                                                <Route path={'/setting/netsetting'} component={NetSetting}/>
+                                                <Route path={'/myset/changepassword'} component={ChangePassword}/>
                                                 <Route path={'/disclaimer'} component={Disclaimer}/>
-                                                <Route path={'/basemsg'} component={BaseMsg}/>
+                                                <Route path={'/myset/basemsg'} component={BaseMsg}/>
+                                                <Route path={'/aboutme'} component={AboutMe}/>
                                                 <Route component={Note404}/>
                                             </Switch>
                                         </div>

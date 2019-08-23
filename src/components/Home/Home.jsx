@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { Card } from 'antd';
 
 import RadarImg from '../ReactChart/radar'
 import DoughnutImg from '../ReactChart/doughnut';
@@ -8,11 +7,6 @@ import HomeList from "../HomeList/HomeList";
 import './Home.css'
 import CountDown from "../CountDown/UnCount";
 import Statis from "../Statistic/Statistic";
-
-// import {Bar} from 'react-chartjs-2';
-const { Meta } = Card;
-
-
 
 // const data = {
 //     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],

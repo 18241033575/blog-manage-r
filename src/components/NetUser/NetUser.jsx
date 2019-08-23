@@ -1,35 +1,53 @@
 import React, {Component} from 'react';
-import { Table, Input, Button, Icon } from 'antd';
-import Highlighter from 'react-highlight-words';
+import {Table, Input, Button, Icon} from 'antd';
 
-const data = [];
-for (let i = 0; i < 46; i++) {
-    data.push({
-        key: i,
-        ID: i,
-        username: `JayShi ${i}`,
-        phone: '12547789654',
-        sex: 'gg',
-        operate: '编辑',
-        IP: `192.168.0.${i}`,
-        avatar: '头像',
-        email: '240633896@qq.com'
-    });
-}
-class NetUser  extends Component {
+const userData = [];
+
+class NetUser extends Component {
+
+    componentDidMount() {
+        const url = "https://api.github.com/events";
+        fetch(url, {
+            method: 'GET',
+        })
+            .then(res => res.json())
+            .then(data => {
+                data.forEach((item, index) => {
+                    userData.push({
+                        key: index,
+                        ID: item.id,
+                        username: item.actor.login,
+                        avatar: item.actor.avatar_url,
+                        phone: item.actor.id,
+                        email: '2406388966@qq.com',
+                        sex: (item.payload.public === true ? "男" : "女"),
+                        IP: item.actor.created_at,
+                        operate: '编辑'
+                    });
+                });
+                this.setState({
+                    loading: true
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
     state = {
         selectedRowKeys: [], // Check here to configure the default column
         searchText: '',
-        title: '测试'
+        title: '测试',
+        loading: false
     };
 
     onSelectChange = selectedRowKeys => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
-        this.setState({ selectedRowKeys });
+        this.setState({selectedRowKeys});
     };
     getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
+        filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
+            <div style={{padding: 8}}>
                 <Input
                     ref={node => {
                         this.searchInput = node;
@@ -38,24 +56,24 @@ class NetUser  extends Component {
                     value={selectedKeys[0]}
                     onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                     onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                    style={{width: 188, marginBottom: 8, display: 'block'}}
                 />
                 <Button
                     type="primary"
                     onClick={() => this.handleSearch(selectedKeys, confirm)}
                     icon="search"
                     size="small"
-                    style={{ width: 90, marginRight: 8 }}
+                    style={{width: 90, marginRight: 8}}
                 >
                     Search
                 </Button>
-                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{width: 90}}>
                     Reset
                 </Button>
             </div>
         ),
         filterIcon: filtered => (
-            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+            <Icon type="search" style={{color: filtered ? '#1890ff' : undefined}}/>
         ),
         onFilter: (value, record) =>
             record[dataIndex]
@@ -67,28 +85,27 @@ class NetUser  extends Component {
                 setTimeout(() => this.searchInput.select());
             }
         },
-        render: text => (
+      /*  render: text => (
             <Highlighter
-                highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                highlightStyle={{backgroundColor: '#ffc069', padding: 0}}
                 searchWords={[this.state.searchText]}
                 autoEscape
                 textToHighlight={text.toString()}
             />
-        ),
+        ),*/
     });
 
     handleSearch = (selectedKeys, confirm) => {
         confirm();
-        this.setState({ searchText: selectedKeys[0] });
+        this.setState({searchText: selectedKeys[0]});
     };
 
     handleReset = clearFilters => {
         clearFilters();
-        this.setState({ searchText: '' });
+        this.setState({searchText: ''});
     };
 
     render() {
-
         const columns = [
             {
                 title: 'ID',
@@ -151,7 +168,7 @@ class NetUser  extends Component {
             },
         ];
 
-        const { selectedRowKeys } = this.state;
+        const {selectedRowKeys} = this.state;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
@@ -177,7 +194,7 @@ class NetUser  extends Component {
                             }
                             return true;
                         });
-                        this.setState({ selectedRowKeys: newSelectedRowKeys });
+                        this.setState({selectedRowKeys: newSelectedRowKeys});
                     },
                 },
                 {
@@ -191,12 +208,13 @@ class NetUser  extends Component {
                             }
                             return false;
                         });
-                        this.setState({ selectedRowKeys: newSelectedRowKeys });
+                        this.setState({selectedRowKeys: newSelectedRowKeys});
                     },
                 },
             ],
         };
-        return <Table title={this.title} rowSelection={rowSelection} columns={columns} dataSource={data} />;
+       return (this.state.loading &&  <Table title={this.title} rowSelection={rowSelection} columns={columns} dataSource={userData}/>);
     }
 }
+
 export default NetUser
