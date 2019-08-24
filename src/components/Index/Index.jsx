@@ -36,6 +36,22 @@ class Index extends Component {
         }
     }
 
+    componentDidMount(){
+        let url = 'https://www.lantutu.wang/banner';
+        fetch(url,{
+            method: 'GET',
+            mode: 'cors',
+        }).then(res => {
+            console.log(res);
+            return res.json();
+        }).then(json => {
+            console.log('获取的结果', json);
+            return json;
+        }).catch(err => {
+            console.log('请求错误', err);
+        })
+    }
+
     componentWillMount() {
         // 暂时做简单登录处理 -- 安全性低
         // 处理思路：拿到账号和密码请求后台，通过给登录状态
