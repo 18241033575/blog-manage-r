@@ -32,7 +32,8 @@ class Index extends Component {
         super(props);
         this.state = {
             isLogin: false,
-            openKeys: []
+            openKeys: [],
+            banners: []
         }
     }
 
@@ -42,14 +43,40 @@ class Index extends Component {
             method: 'GET',
             mode: 'cors',
         }).then(res => {
-            console.log(res);
+            // console.log(res);
             return res.json();
         }).then(json => {
-            console.log('获取的结果', json);
-            return json;
+            // console.log('获取的结果', json);
+            // return json;
+            // console.log(json.banners);
         }).catch(err => {
             console.log('请求错误', err);
-        })
+        });
+        fetch('https://www.lantutu.wang/dj/hot', {
+            method: 'GET',
+            mode: 'cors',
+        }).then(res => {
+            return res.json();
+        }).then(json => {
+            if (json.code === 200) {
+                console.log(json);
+            }
+        }).catch(err => {
+            console.log('请求错误', err);
+        });
+
+        fetch('https://www.lantutu.wang/mv/first?limit=30', {
+            method: 'GET',
+            mode: 'cors',
+        }).then(res => {
+            return res.json();
+        }).then(json => {
+            if (json.code === 200) {
+                // console.log(json);
+            }
+        }).catch(err => {
+            console.log('请求错误', err);
+        });
     }
 
     componentWillMount() {
