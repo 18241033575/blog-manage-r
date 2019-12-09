@@ -22,11 +22,25 @@
       <file leaf-file-name="Index.jsx" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/Index/Index.jsx">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="2373">
               <caret line="188" column="57" lean-forward="true" selection-start-line="188" selection-start-column="57" selection-end-line="188" selection-end-column="57" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
+=======
+            <state relative-caret-position="-192">
+              <caret line="59" column="13" selection-start-line="59" selection-start-column="13" selection-end-line="59" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CommentManage.jsx" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/CommentManage/CommentManage.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4800">
+              <caret line="201" column="36" selection-start-line="201" selection-start-column="29" selection-end-line="201" selection-end-column="36" />
+>>>>>>> 19d811514e0f6b8d3b358409f55ce455eabdc200
             </state>
           </provider>
         </entry>
@@ -55,7 +69,11 @@
       <file leaf-file-name="Index.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/Index/Index.css">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="336">
+=======
+            <state relative-caret-position="384">
+>>>>>>> 19d811514e0f6b8d3b358409f55ce455eabdc200
               <caret line="16" selection-start-line="15" selection-end-line="22" />
             </state>
           </provider>
@@ -91,6 +109,7 @@
       <find>category</find>
       <find>Popconfirm</find>
       <find>subscriptions</find>
+      <find>onOpenChange</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -175,10 +194,18 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
+<<<<<<< HEAD
   <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="218" />
     <option name="width" value="1582" />
     <option name="height" value="1040" />
+=======
+  <component name="ProjectFrameBounds">
+    <option name="x" value="495" />
+    <option name="y" value="24" />
+    <option name="width" value="1223" />
+    <option name="height" value="1017" />
+>>>>>>> 19d811514e0f6b8d3b358409f55ce455eabdc200
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -209,6 +236,13 @@
               <item name="blog-manage-r" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="blog-manage-r" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog-manage-r" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="CommentManage" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="blog-manage-r" type="b2602c69:ProjectViewProjectNode" />
@@ -317,24 +351,55 @@
       <workItem from="1566437218603" duration="2874000" />
       <workItem from="1566524743375" duration="16598000" />
       <workItem from="1566608710994" duration="2902000" />
+<<<<<<< HEAD
       <workItem from="1575246886793" duration="1020000" />
       <workItem from="1575594009048" duration="8299000" />
+=======
+      <workItem from="1566821715630" duration="599000" />
+      <workItem from="1571320472965" duration="666000" />
+      <workItem from="1571394278333" duration="1812000" />
+      <workItem from="1571653072798" duration="599000" />
+      <workItem from="1571740041982" duration="599000" />
+      <workItem from="1571926693679" duration="1145000" />
+      <workItem from="1572186565470" duration="3764000" />
+      <workItem from="1572259446041" duration="1947000" />
+      <workItem from="1572443884471" duration="2596000" />
+      <workItem from="1572517895132" duration="1227000" />
+      <workItem from="1572770270030" duration="429000" />
+      <workItem from="1572862729578" duration="1199000" />
+      <workItem from="1572948744073" duration="599000" />
+      <workItem from="1572955595050" duration="1210000" />
+      <workItem from="1573035904681" duration="2533000" />
+      <workItem from="1573122129930" duration="2679000" />
+      <workItem from="1573469843463" duration="1648000" />
+      <workItem from="1573644752352" duration="1198000" />
+      <workItem from="1573731394567" duration="599000" />
+      <workItem from="1574074849800" duration="676000" />
+      <workItem from="1575200784857" duration="600000" />
+>>>>>>> 19d811514e0f6b8d3b358409f55ce455eabdc200
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="133703000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="91" y="27" width="1582" height="1040" extended-state="0" />
     <editor active="true" />
+=======
+    <option name="totallyTimeSpent" value="152708000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="495" y="24" width="1223" height="1017" extended-state="0" />
+>>>>>>> 19d811514e0f6b8d3b358409f55ce455eabdc200
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1599741" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20843881" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info id="npm" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32897604" />
@@ -353,19 +418,31 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+<<<<<<< HEAD
+=======
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+>>>>>>> 19d811514e0f6b8d3b358409f55ce455eabdc200
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22128557" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
+<<<<<<< HEAD
       <window_info anchor="bottom" id="Version Control" order="10" />
+=======
+>>>>>>> 19d811514e0f6b8d3b358409f55ce455eabdc200
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32897604" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32897604" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+<<<<<<< HEAD
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32897604" />
+=======
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="Message" order="0" />
+>>>>>>> 19d811514e0f6b8d3b358409f55ce455eabdc200
       <window_info id="Favorites" order="3" side_tool="true" />
     </layout-to-restore>
   </component>
@@ -621,9 +698,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="499">
           <caret line="109" column="39" lean-forward="true" selection-start-line="109" selection-start-column="39" selection-end-line="109" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -631,19 +705,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="110" column="41" lean-forward="true" selection-start-line="110" selection-start-column="41" selection-end-line="110" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/CommentManage/CommentManage.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="449">
-          <caret line="118" lean-forward="true" selection-start-line="118" selection-end-line="118" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -658,9 +719,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="726">
           <caret line="22" column="53" selection-start-line="22" selection-start-column="53" selection-end-line="22" selection-end-column="53" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -668,15 +726,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="977">
           <caret line="119" column="22" lean-forward="true" selection-start-line="119" selection-start-column="22" selection-end-line="119" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Index/Index.css">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="336">
+=======
+        <state relative-caret-position="384">
+>>>>>>> 19d811514e0f6b8d3b358409f55ce455eabdc200
           <caret line="16" selection-start-line="15" selection-end-line="22" />
         </state>
       </provider>
@@ -687,6 +746,7 @@
     <entry file="file://$PROJECT_DIR$/src/static/img/logo.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/node_modules/antd/dist/antd.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="567">
@@ -698,16 +758,27 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
           <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
+=======
+    <entry file="file://$PROJECT_DIR$/src/components/CommentManage/CommentManage.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4800">
+          <caret line="201" column="36" selection-start-line="201" selection-start-column="29" selection-end-line="201" selection-end-column="36" />
+>>>>>>> 19d811514e0f6b8d3b358409f55ce455eabdc200
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Index/Index.jsx">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="2373">
           <caret line="188" column="57" lean-forward="true" selection-start-line="188" selection-start-column="57" selection-end-line="188" selection-end-column="57" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
+=======
+        <state relative-caret-position="-192">
+          <caret line="59" column="13" selection-start-line="59" selection-start-column="13" selection-end-line="59" selection-end-column="13" />
+>>>>>>> 19d811514e0f6b8d3b358409f55ce455eabdc200
         </state>
       </provider>
     </entry>

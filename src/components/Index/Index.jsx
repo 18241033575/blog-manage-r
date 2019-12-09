@@ -33,27 +33,7 @@ class Index extends Component {
         this.state = {
             isLogin: false,
             openKeys: [],
-            userMsg: {}
         }
-    }
-
-    componentDidMount() {
-        let url = 'http://localhost:8888/';
-        fetch(url, {
-            method: 'GET',
-            mode: 'cors',
-        }).then(res => {
-            console.log(res);
-            return res.json();
-        }).then(json => {
-            console.log('获取的结果', json);
-            this.setState({
-                userMsg: json
-            });
-            return json;
-        }).catch(err => {
-            console.log('请求错误', err);
-        })
     }
 
     // 登陆
