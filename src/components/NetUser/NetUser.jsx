@@ -3,7 +3,7 @@ import {Table, Input, Button, Icon} from 'antd';
 
 let userData = [];
 
-class NetUser extends Component {
+export default class NetUser extends Component {
 
     componentDidMount() {
         fetch('http://localhost:8888/netUser')
@@ -12,42 +12,19 @@ class NetUser extends Component {
             })
             .then((res) => {
                 if (res.code === 200) {
+                    res.data.forEach((item, index) => {
+                        item.key = item.id;
+                    });
                     userData = res.data;
                     console.log(userData);
                 }
-            })
-            .catch((err) => {
-
-            });
-
-
-
-    /*    const url = "https://api.github.com/events";
-        fetch(url, {
-            method: 'GET',
-        })
-            .then(res => res.json())
-            .then(data => {
-                data.forEach((item, index) => {
-                    userData.push({
-                        key: index,
-                        ID: item.id,
-                        username: item.actor.login,
-                        avatar: item.actor.avatar_url,
-                        phone: item.actor.id,
-                        email: '2406388966@qq.com',
-                        sex: (item.payload.public === true ? "男" : "女"),
-                        IP: item.actor.created_at,
-                        operate: '编辑'
-                    });
-                });
                 this.setState({
                     loading: true
                 })
             })
-            .catch(err => {
-                console.log(err);
-            });*/
+            .catch((err) => {
+
+            });
     }
 
     state = {
@@ -126,12 +103,12 @@ class NetUser extends Component {
             {
                 title: 'ID',
                 dataIndex: 'id',
-                sorter: (a, b) => a.ID - b.ID
+                sorter: (a, b) => a.id - b.id
             },
             {
                 title: '用户名',
                 dataIndex: 'name',
-                sorter: (a, b) => a.username.length - b.username.length,
+                sorter: (a, b) => a.name.length - b.name.length,
                 filters: [
                     {
                         text: 'Joe',
@@ -155,7 +132,7 @@ class NetUser extends Component {
                             },
                         ],
                     }],
-                onFilter: (value, record) => record.username.indexOf(value) === 0,
+                onFilter: (value, record) => record.name.indexOf(value) === 0,
             },
             {
                 title: '头像',
@@ -232,5 +209,3 @@ class NetUser extends Component {
        return (this.state.loading &&  <Table title={this.title} rowSelection={rowSelection} columns={columns} dataSource={userData}/>);
     }
 }
-
-export default NetUser
