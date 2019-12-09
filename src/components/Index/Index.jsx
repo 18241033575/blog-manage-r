@@ -6,7 +6,7 @@ import {
     Route
 } from 'react-router-dom'
 
-import {Layout, Menu, Breadcrumb, Icon} from 'antd';
+import {Layout, Menu, Breadcrumb, Icon, Avatar, Badge} from 'antd';
 import Login from '../Login/Login'
 import './Index.css'
 import Home from "../Home/Home";
@@ -32,13 +32,14 @@ class Index extends Component {
         super(props);
         this.state = {
             isLogin: false,
-            openKeys: []
+            openKeys: [],
+            userMsg: {}
         }
     }
 
-    componentDidMount(){
-        let url = 'https://www.lantutu.wang/banner';
-        fetch(url,{
+    componentDidMount() {
+        let url = 'http://localhost:8888/';
+        fetch(url, {
             method: 'GET',
             mode: 'cors',
         }).then(res => {
@@ -46,11 +47,21 @@ class Index extends Component {
             return res.json();
         }).then(json => {
             console.log('获取的结果', json);
+            this.setState({
+                userMsg: json
+            });
             return json;
         }).catch(err => {
             console.log('请求错误', err);
         })
     }
+
+    // 登陆
+    getLogin = (state) => {
+        this.setState({
+            isLogin: state
+        })
+    };
 
     componentWillMount() {
         // 暂时做简单登录处理 -- 安全性低
@@ -64,7 +75,7 @@ class Index extends Component {
     onOpenChange = openKeys => {
         const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
         if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-            this.setState({ openKeys });
+            this.setState({openKeys});
         } else {
             this.setState({
                 openKeys: latestOpenKey ? [latestOpenKey] : [],
@@ -76,7 +87,9 @@ class Index extends Component {
             openKeys: []
         })
     };
+
     render() {
+        const {history} = this.props;
         return (
             <Router>
                 {
@@ -253,7 +266,15 @@ class Index extends Component {
                                     </Menu>
                                 </Sider>
                                 <Layout>
-                                    <Header style={{background: '#fff', padding: 0}}/>
+                                    <Header style={{background: '#fff', padding: 0}}>
+                                        <Avatar size={36} icon="user"/>
+                                        <span>{this.state.userMsg.name}</span>
+                                        <Badge count={this.state.userMsg.age} showZero>
+                                            <Avatar size={36} icon="message">
+                                                <a href="#" className="head-example"/>
+                                            </Avatar>
+                                        </Badge>
+                                    </Header>
                                     <Content style={{margin: '0 16px'}}>
                                         <Breadcrumb style={{margin: '16px 0'}}>
                                             <Breadcrumb.Item>User</Breadcrumb.Item>
@@ -287,7 +308,7 @@ class Index extends Component {
                 {
                     !this.state.isLogin && (
                         <div className={'router'}>
-                            <Login/>
+                            <Login getLogin={this.getLogin} />
                         </div>
                     )
                 }
