@@ -1,12 +1,28 @@
 import React, {Component} from 'react';
 import {Table, Input, Button, Icon} from 'antd';
 
-const userData = [];
+let userData = [];
 
 class NetUser extends Component {
 
     componentDidMount() {
-        const url = "https://api.github.com/events";
+        fetch('http://localhost:8888/netUser')
+            .then(res => {
+                return res.json()
+            })
+            .then((res) => {
+                if (res.code === 200) {
+                    userData = res.data;
+                    console.log(userData);
+                }
+            })
+            .catch((err) => {
+
+            });
+
+
+
+    /*    const url = "https://api.github.com/events";
         fetch(url, {
             method: 'GET',
         })
@@ -31,7 +47,7 @@ class NetUser extends Component {
             })
             .catch(err => {
                 console.log(err);
-            });
+            });*/
     }
 
     state = {
@@ -109,12 +125,12 @@ class NetUser extends Component {
         const columns = [
             {
                 title: 'ID',
-                dataIndex: 'ID',
+                dataIndex: 'id',
                 sorter: (a, b) => a.ID - b.ID
             },
             {
                 title: '用户名',
-                dataIndex: 'username',
+                dataIndex: 'name',
                 sorter: (a, b) => a.username.length - b.username.length,
                 filters: [
                     {
@@ -143,11 +159,11 @@ class NetUser extends Component {
             },
             {
                 title: '头像',
-                dataIndex: 'avatar',
+                dataIndex: 'avatarUrl',
             },
             {
                 title: '手机',
-                dataIndex: 'phone',
+                dataIndex: 'tel',
             },
             {
                 title: '邮箱',
@@ -155,7 +171,7 @@ class NetUser extends Component {
             },
             {
                 title: '性别',
-                dataIndex: 'sex',
+                dataIndex: 'gender',
             },
             {
                 title: 'IP',

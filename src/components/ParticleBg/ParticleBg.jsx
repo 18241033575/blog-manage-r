@@ -5,6 +5,7 @@ class ParticleBg  extends Component {
     render () {
       return(
           <Particles
+              style={{position: 'absolute',top: 0,left:0,zIndex: -1}}
               params={{
                   "particles": {
                       "number": {

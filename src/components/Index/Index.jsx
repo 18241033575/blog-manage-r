@@ -4,35 +4,44 @@ import {
     NavLink,
     Switch,
     Route
-} from 'react-router-dom'
+} from 'react-router-dom';
 
-import {Layout, Menu, Breadcrumb, Icon, Avatar, Badge} from 'antd';
+import {Layout, Menu, Breadcrumb, Icon, Avatar, Badge } from 'antd';
 import Login from '../Login/Login'
+import Register from '../Register/Register'
 import './Index.css'
-import Home from "../Home/Home";
-import Note404 from "../Note404/Note404";
-import NetUser from "../NetUser/NetUser";
-import NewsCenter from "../NewsCenter/NewsCenter";
-import CategorySysterm from "../CategorySysterm/CategorySysterm";
-import ArticleList from "../ArticleList/ArticleList";
-import CommentManage from "../CommentManage/CommentManage";
-import Administor from "../Administor/Administor";
-import Schedule from "../Schedule/Schedule";
-import NetSetting from "../NetSetting/NetSetting";
-import ChangePassword from "../ChangePassword/ChangePassword";
-import Disclaimer from "../Disclaimer/Disclaimer";
-import BaseMsg from "../BaseMsg/BaseMsg";
-import AboutMe from "../AboutMe/AboutMe";
+import Home from '../Home/Home';
+import Note404 from '../Note404/Note404';
+import NetUser from '../NetUser/NetUser';
+import NewsCenter from '../NewsCenter/NewsCenter';
+import CategorySysterm from '../CategorySysterm/CategorySysterm';
+import ArticleList from '../ArticleList/ArticleList';
+import CommentManage from '../CommentManage/CommentManage';
+import Administor from '../Administor/Administor';
+import Schedule from '../Schedule/Schedule';
+import NetSetting from '../NetSetting/NetSetting';
+import ChangePassword from '../ChangePassword/ChangePassword';
+import Disclaimer from '../Disclaimer/Disclaimer';
+import BaseMsg from '../BaseMsg/BaseMsg';
+import AboutMe from '../AboutMe/AboutMe';
+// import Login from '../Login/Login'
+
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
 
-class Index extends Component {
+
+export default class Index extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isLogin: false,
             openKeys: [],
+            userMsg: {
+                name: '',
+                age: ''
+            },
+            changeLogin: true
         }
     }
 
@@ -48,7 +57,16 @@ class Index extends Component {
         // 处理思路：拿到账号和密码请求后台，通过给登录状态
         let userInfo = localStorage.getItem('USER');
         userInfo ? this.setState({isLogin: true}) : this.setState({isLogin: false});
+        // this.props.history.push('/Login')
+        console.log(window.location);
+        // window.location.href = '/Login'
     }
+
+    loginState = (state) => {
+      this.setState({
+          changeLogin: state
+      })
+    };
 
     rootSubmenuKeys = ['sub1', 'sub4', 'sub5', 'sub8'];
 
@@ -64,12 +82,19 @@ class Index extends Component {
     };
     onItem1 = () => {
         this.setState({
-            openKeys: []
+            openKeys: [],
+
+        })
+    };
+    onCollapse = ()=> {
+        this.setState({
+            collapsed: !this.state.collapsed
         })
     };
 
+
+
     render() {
-        const {history} = this.props;
         return (
             <Router>
                 {
@@ -251,7 +276,7 @@ class Index extends Component {
                                         <span>{this.state.userMsg.name}</span>
                                         <Badge count={this.state.userMsg.age} showZero>
                                             <Avatar size={36} icon="message">
-                                                <a href="#" className="head-example"/>
+                                                <span className="head-example" />
                                             </Avatar>
                                         </Badge>
                                     </Header>
@@ -275,6 +300,8 @@ class Index extends Component {
                                                 <Route path={'/disclaimer'} component={Disclaimer}/>
                                                 <Route path={'/myset/basemsg'} component={BaseMsg}/>
                                                 <Route path={'/aboutme'} component={AboutMe}/>
+                                                {/*<Route path={'/login'} component={Login}/>*/}
+                                                {/*<Route path={'/register'} component={AboutMe}/>*/}
                                                 <Route component={Note404}/>
                                             </Switch>
                                         </div>
@@ -286,9 +313,16 @@ class Index extends Component {
                     )
                 }
                 {
-                    !this.state.isLogin && (
+                    !this.state.isLogin && this.state.changeLogin && (
                         <div className={'router'}>
-                            <Login getLogin={this.getLogin} />
+                            <Login changeLogin={this.loginState} getLogin={this.getLogin} />
+                        </div>
+                    )
+                }
+                {
+                    !this.state.isLogin && !this.state.changeLogin && (
+                        <div className={'router'}>
+                            <Register changeLogin={this.loginState} getLogin={this.getLogin} />
                         </div>
                     )
                 }
@@ -296,5 +330,3 @@ class Index extends Component {
         );
     }
 }
-
-export default Index
