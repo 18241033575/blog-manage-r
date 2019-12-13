@@ -8,24 +8,36 @@ const { TabPane } = Tabs;
 function callback(key) {
     console.log(key);
 }
-
+let dataSource = [];
 class NewsCenter  extends Component {
+    constructor(props) {
+        super(props);
+        this.state= {
+            allNews: '',
+            notice: '',
+            discuss: ''
+        };
+    }
 
+    componentWillMount() {
+        fetch('http://localhost:8888/message')
+            .then(res => {
+                console.log(res);
+                return res.json()
+            })
+            .then(res => {
+                if (res.code === 200) {
+                    res.data.forEach((item, index) => {
+                        item.key = item.id;
+                    });
+                    dataSource = res.data;
+                    this.setState({
+                        allNews: dataSource.length
+                    })
+                }
+            })
+    }
     render () {
-        const dataSource = [
-            {
-                key: '1',
-                name: '胡彦斌',
-                age: 32,
-                address: '西湖区湖底公园1号',
-            },
-            {
-                key: '2',
-                name: '胡彦祖',
-                age: 42,
-                address: '西湖区湖底公园1号',
-            },
-        ];
 
         const columns = [
             {
@@ -34,13 +46,13 @@ class NewsCenter  extends Component {
                 key: 'name',
             },
             {
-                title: '年龄',
-                dataIndex: 'age',
+                title: '所在文章',
+                dataIndex: 'article',
                 key: 'age',
             },
             {
-                title: '住址',
-                dataIndex: 'address',
+                title: '评论信息',
+                dataIndex: 'explain',
                 key: 'address',
             },
         ];
@@ -50,12 +62,12 @@ class NewsCenter  extends Component {
                   tab={
                       <span>
                           全部消息
-                          <Badge style={{ marginLeft: 5, marginTop: -3}} count={25} />
+                          <Badge style={{ marginLeft: 5, marginTop: -3}} count={this.state.allNews} />
                       </span>
                   }
                   key="1"
               >
-                  <Table dataSource={dataSource} columns={columns} />;
+                  <Table dataSource={dataSource} columns={columns} />
               </TabPane>
               <TabPane tab="通知" key="2">
                   Content of Tab Pane 2
@@ -64,7 +76,7 @@ class NewsCenter  extends Component {
                   Content of Tab Pane 3
               </TabPane>
           </Tabs>
-      );
+      )
     }
 }
 export default NewsCenter

@@ -12,6 +12,7 @@ const EditableRow = ({ form, index, ...props }) => (
 const EditableFormRow = Form.create()(EditableRow);
 
 class EditableCell extends React.Component {
+
     state = {
         editing: false,
     };
@@ -92,18 +93,14 @@ class CategorySysterm  extends Component {
         super(props);
         this.columns = [
             {
+                title: 'ID',
+                dataIndex: 'id',
+            },
+            {
                 title: 'name',
                 dataIndex: 'name',
                 width: '30%',
                 editable: true,
-            },
-            {
-                title: 'age',
-                dataIndex: 'age',
-            },
-            {
-                title: 'address',
-                dataIndex: 'address',
             },
             {
                 title: 'operation',
@@ -118,24 +115,29 @@ class CategorySysterm  extends Component {
         ];
 
         this.state = {
-            dataSource: [
-                {
-                    key: '0',
-                    name: 'Edward King 0',
-                    age: '32',
-                    address: 'London, Park Lane no. 0',
-                },
-                {
-                    key: '1',
-                    name: 'Edward King 1',
-                    age: '32',
-                    address: 'London, Park Lane no. 1',
-                },
-            ],
-            count: 2,
+            dataSource: [],
+            count: 0,
         };
-    }
 
+    }
+    componentWillMount() {
+        fetch('http://localhost:8888/category')
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                console.log(res);
+                if (res.code === 200) {
+                    res.data.forEach((item, index) => {
+                        item.key = item.id;
+                    });
+                    this.setState({
+                        dataSource: res.data,
+                        count: res.data.length
+                    });
+                }
+            })
+    }
     handleDelete = key => {
         const dataSource = [...this.state.dataSource];
         this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
