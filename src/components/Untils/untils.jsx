@@ -15,7 +15,10 @@ import { message } from 'antd';
     message.loading(content, [duration], onClose)
 */
 export function showMessage(msg, type = 'info', duration = 3, fn = () => {}) {
+    message.config({
+        maxCount: 1,
+    });
     message[type](msg, duration, () => {
         fn()
-    });
+    }, 1);
 }

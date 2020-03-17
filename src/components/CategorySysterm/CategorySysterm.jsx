@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { Table, Input, Button, Popconfirm, Form } from 'antd';
+import { Table, Input, Button, Popconfirm, Form, Drawer, Modal } from 'antd';
+import { showMessage } from '../Untils/untils'
 
 const EditableContext = React.createContext();
 
@@ -88,7 +89,7 @@ class EditableCell extends React.Component {
 }
 
 
-class CategorySysterm  extends Component {
+export default  class CategorySysterm  extends Component {
     constructor(props) {
         super(props);
         this.columns = [
@@ -98,7 +99,7 @@ class CategorySysterm  extends Component {
             },
             {
                 title: 'name',
-                dataIndex: 'name',
+                dataIndex: 'value',
                 width: '30%',
                 editable: true,
             },
@@ -117,12 +118,48 @@ class CategorySysterm  extends Component {
         this.state = {
             dataSource: [],
             count: 0,
+            visible: false,
+            categoryName: ''
         };
 
     }
-    componentWillMount() {
-        fetch('http://localhost:8888/category')
+    // 取消
+    setModalVisible = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+    // 保存分类
+    setModalVisibleOk = () => {
+        if (this.state.categoryName.trim() === '') {
+            showMessage('类别名称不能为空', 'error');
+            return
+        }
+        fetch('http://localhost:8778/category', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'type=add&value='+this.state.categoryName
+        })
             .then(res => {
+                console.log(res);
+            })
+            .then(res => {
+                console.log(res);
+            })
+    };
+    onChange = e => {
+        this.setState({
+            categoryName: e.target.value,
+        });
+    };
+    componentWillMount() {
+        fetch('http://localhost:8778/category')
+            .then(res => {
+                // console.log(res);
                 return res.json()
             })
             .then(res => {
@@ -144,7 +181,10 @@ class CategorySysterm  extends Component {
     };
 
     handleAdd = () => {
-        const { count, dataSource } = this.state;
+        this.setState({
+            visible: true,
+        });
+    /*    const { count, dataSource } = this.state;
         const newData = {
             key: count,
             name: `Edward King ${count}`,
@@ -154,7 +194,7 @@ class CategorySysterm  extends Component {
         this.setState({
             dataSource: [...dataSource, newData],
             count: count + 1,
-        });
+        });*/
     };
 
     handleSave = row => {
@@ -203,8 +243,17 @@ class CategorySysterm  extends Component {
                     dataSource={dataSource}
                     columns={columns}
                 />
+                <Modal
+                    title="新增类别"
+                    centered
+                    visible={this.state.visible}
+                    onOk={() => this.setModalVisibleOk(false)}
+                    onCancel={() => this.setModalVisible(false)}
+                >
+                    <Input placeholder="请输入类别名称" allowClear onChange={this.onChange} />
+                </Modal>
             </div>
         );
     }
 }
-export default CategorySysterm
+
