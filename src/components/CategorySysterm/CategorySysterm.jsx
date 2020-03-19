@@ -108,9 +108,10 @@ export default  class CategorySysterm  extends Component {
                 dataIndex: 'operation',
                 render: (text, record) =>
                     this.state.dataSource.length >= 1 ? (
-                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-                            <span>Delete</span>
-                        </Popconfirm>
+                        <span>
+                            <span onClick={this.categoryEdit.bind(this, record.value)}>edit</span>
+                            <span onClick={this.categoryDel.bind(this, record.value)}>delete</span>
+                        </span>
                     ) : null,
             },
         ];
@@ -119,10 +120,29 @@ export default  class CategorySysterm  extends Component {
             dataSource: [],
             count: 0,
             visible: false,
-            categoryName: ''
+            categoryName: '',
+            categoryOrg: 'add',
+            confirmModal: false
         };
 
     }
+    // 编辑类别
+    categoryEdit = (name) => {
+        console.log(name);
+        this.setState({
+            visible: true,
+            categoryName: name,
+            categoryOrg: 'edit'
+        });
+    };
+    // 删除类别
+    categoryDel = (name) => {
+        this.setState({
+            confirmModal: true,
+            categoryName: name,
+            categoryOrg: 'delete'
+        });
+    };
     // 取消
     setModalVisible = () => {
         this.setState({
@@ -142,7 +162,7 @@ export default  class CategorySysterm  extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: 'type=add&value='+this.state.categoryName
+            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName
         })
             .then(res => {
                 console.log(res);
@@ -183,6 +203,7 @@ export default  class CategorySysterm  extends Component {
     handleAdd = () => {
         this.setState({
             visible: true,
+            categoryOrg: 'add'
         });
     /*    const { count, dataSource } = this.state;
         const newData = {
@@ -195,6 +216,30 @@ export default  class CategorySysterm  extends Component {
             dataSource: [...dataSource, newData],
             count: count + 1,
         });*/
+    };
+
+    confirmModalOk = () => {
+        fetch('http://localhost:8778/category', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName + '&id=3'
+        })
+            .then(res => {
+                console.log(res);
+            })
+            .then(res => {
+                console.log(res);
+            })
+    };
+
+    confirmModalCancel = () => {
+        this.setState({
+            confirmModal: false,
+        });
     };
 
     handleSave = row => {
@@ -250,7 +295,16 @@ export default  class CategorySysterm  extends Component {
                     onOk={() => this.setModalVisibleOk(false)}
                     onCancel={() => this.setModalVisible(false)}
                 >
-                    <Input placeholder="请输入类别名称" allowClear onChange={this.onChange} />
+                    <Input placeholder="请输入类别名称" allowClear value={this.state.categoryName} onChange={this.onChange} />
+                </Modal>
+                <Modal
+                    title="提示信息"
+                    centered
+                    visible={this.state.confirmModal}
+                    onOk={() => this.confirmModalOk(false)}
+                    onCancel={() => this.confirmModalCancel(false)}
+                >
+                    <p>删除不可恢复，你确定要删除么？</p>
                 </Modal>
             </div>
         );
