@@ -109,7 +109,7 @@ export default  class CategorySysterm  extends Component {
                 render: (text, record) =>
                     this.state.dataSource.length >= 1 ? (
                         <span>
-                            <span onClick={this.categoryEdit.bind(this, record.value)}>edit</span>
+                            <span onClick={this.categoryEdit.bind(this, record.value, record._id)}>edit</span>
                             <span onClick={this.categoryDel.bind(this, record.value)}>delete</span>
                         </span>
                     ) : null,
@@ -127,12 +127,13 @@ export default  class CategorySysterm  extends Component {
 
     }
     // 编辑类别
-    categoryEdit = (name) => {
+    categoryEdit = (name, id) => {
         console.log(name);
         this.setState({
             visible: true,
             categoryName: name,
-            categoryOrg: 'edit'
+            categoryOrg: 'edit',
+            _id : id
         });
     };
     // 删除类别
@@ -162,7 +163,7 @@ export default  class CategorySysterm  extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName
+            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName + '&_id=' + this.state._id
         })
             .then(res => {
                 console.log(res);
@@ -226,7 +227,7 @@ export default  class CategorySysterm  extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName + '&id=3'
+            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName + '&_id=' + this.state._id
         })
             .then(res => {
                 console.log(res);
