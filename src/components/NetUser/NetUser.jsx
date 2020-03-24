@@ -6,7 +6,7 @@ let userData = [];
 export default class NetUser extends Component {
 
     componentDidMount() {
-        fetch('http://localhost:8888/netUser')
+        fetch('http://localhost:8778/netUser')
             .then(res => {
                 return res.json()
             })
@@ -97,7 +97,24 @@ export default class NetUser extends Component {
         clearFilters();
         this.setState({searchText: ''});
     };
-
+    // 编辑类别
+    categoryEdit = (name, id) => {
+        console.log(name);
+        this.setState({
+            visible: true,
+            categoryName: name,
+            categoryOrg: 'edit',
+            _id : id
+        });
+    };
+    // 删除类别
+    categoryDel = (name) => {
+        this.setState({
+            confirmModal: true,
+            categoryName: name,
+            categoryOrg: 'delete'
+        });
+    };
     render() {
         const columns = [
             {
@@ -157,8 +174,15 @@ export default class NetUser extends Component {
             },
             {
                 title: '操作',
-                dataIndex: 'operate',
-            },
+                dataIndex: 'operation',
+                render: (text, record) =>
+                    userData.length >= 1 ? (
+                        <span>
+                            <span onClick={this.categoryEdit.bind(this, record.value, record._id)}>冻结</span>
+                            <span onClick={this.categoryDel.bind(this, record.value)}>解冻</span>
+                        </span>
+                    ) : null,
+            }
         ];
 
         const {selectedRowKeys} = this.state;
