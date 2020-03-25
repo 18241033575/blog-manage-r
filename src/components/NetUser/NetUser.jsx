@@ -118,11 +118,6 @@ export default class NetUser extends Component {
     render() {
         const columns = [
             {
-                title: 'ID',
-                dataIndex: 'id',
-                sorter: (a, b) => a.id - b.id
-            },
-            {
                 title: '用户名',
                 dataIndex: 'name',
                 sorter: (a, b) => a.name.length - b.name.length,
@@ -157,7 +152,7 @@ export default class NetUser extends Component {
             },
             {
                 title: '手机',
-                dataIndex: 'tel',
+                dataIndex: 'phone',
             },
             {
                 title: '邮箱',
