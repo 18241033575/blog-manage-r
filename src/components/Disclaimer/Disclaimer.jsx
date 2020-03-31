@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import BraftEditor from 'braft-editor';
-
+import 'braft-extensions/dist/code-highlighter.css'
 import 'braft-editor/dist/index.css'
 import './disclaimer.css'
 
