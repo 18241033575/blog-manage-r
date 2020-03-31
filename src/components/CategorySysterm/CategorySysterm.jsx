@@ -1,93 +1,7 @@
 import React, {Component} from 'react';
-import { Table, Input, Button, Popconfirm, Form, Drawer, Modal } from 'antd';
+import { Table, Input, Button, Modal } from 'antd';
 import { showMessage } from '../Untils/untils'
-
-const EditableContext = React.createContext();
-
-const EditableRow = ({ form, index, ...props }) => (
-    <EditableContext.Provider value={form}>
-        <tr {...props} />
-    </EditableContext.Provider>
-);
-
-const EditableFormRow = Form.create()(EditableRow);
-
-class EditableCell extends React.Component {
-
-    state = {
-        editing: false,
-    };
-
-    toggleEdit = () => {
-        const editing = !this.state.editing;
-        this.setState({ editing }, () => {
-            if (editing) {
-                this.input.focus();
-            }
-        });
-    };
-
-    save = e => {
-        const { record, handleSave } = this.props;
-        this.form.validateFields((error, values) => {
-            if (error && error[e.currentTarget.id]) {
-                return;
-            }
-            this.toggleEdit();
-            handleSave({ ...record, ...values });
-        });
-    };
-
-    renderCell = form => {
-        this.form = form;
-        const { children, dataIndex, record, title } = this.props;
-        const { editing } = this.state;
-        return editing ? (
-            <Form.Item style={{ margin: 0 }}>
-                {form.getFieldDecorator(dataIndex, {
-                    rules: [
-                        {
-                            required: true,
-                            message: `${title} is required.`,
-                        },
-                    ],
-                    initialValue: record[dataIndex],
-                })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
-            </Form.Item>
-        ) : (
-            <div
-                className="editable-cell-value-wrap"
-                style={{ paddingRight: 24 }}
-                onClick={this.toggleEdit}
-            >
-                {children}
-            </div>
-        );
-    };
-
-    render() {
-        const {
-            editable,
-            dataIndex,
-            title,
-            record,
-            index,
-            handleSave,
-            children,
-            ...restProps
-        } = this.props;
-        return (
-            <td {...restProps}>
-                {editable ? (
-                    <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-                ) : (
-                    children
-                )}
-            </td>
-        );
-    }
-}
-
+import './CategorySysterm.css'
 
 export default  class CategorySysterm  extends Component {
     constructor(props) {
@@ -95,24 +9,23 @@ export default  class CategorySysterm  extends Component {
         this.columns = [
             {
                 title: 'ID',
-                dataIndex: 'id',
+                dataIndex: '_id',
             },
             {
-                title: 'name',
+                title: '分类名称',
                 dataIndex: 'value',
-                width: '30%',
-                editable: true,
+                width: '30%'
             },
             {
-                title: 'operation',
+                title: '操作',
                 dataIndex: 'operation',
                 render: (text, record) =>
-                    this.state.dataSource.length >= 1 ? (
+                    (
                         <span>
-                            <span onClick={this.categoryEdit.bind(this, record.value, record._id)}>edit</span>
-                            <span onClick={this.categoryDel.bind(this, record.value)}>delete</span>
+                            <span className={'edit'} onClick={this.categoryEdit.bind(this, record.value, record._id)}>编辑</span>
+                            <span className={'delete'} onClick={this.categoryDel.bind(this, record.value)}>删除</span>
                         </span>
-                    ) : null,
+                    ),
             },
         ];
 
@@ -128,7 +41,6 @@ export default  class CategorySysterm  extends Component {
     }
     // 编辑类别
     categoryEdit = (name, id) => {
-        console.log(name);
         this.setState({
             visible: true,
             categoryName: name,
@@ -156,85 +68,29 @@ export default  class CategorySysterm  extends Component {
             showMessage('类别名称不能为空', 'error');
             return
         }
-        fetch('http://localhost:8778/category', {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName + '&_id=' + this.state._id
-        })
-            .then(res => {
-                console.log(res);
-            })
-            .then(res => {
-                console.log(res);
-            })
+        this.setCategoryData();
     };
+    // 动态改变input值
     onChange = e => {
         this.setState({
             categoryName: e.target.value,
         });
     };
+    // 初始化请求数据
     componentWillMount() {
-        fetch('http://localhost:8778/category')
-            .then(res => {
-                // console.log(res);
-                return res.json()
-            })
-            .then(res => {
-                console.log(res);
-                if (res.code === 200) {
-                    res.data.forEach((item, index) => {
-                        item.key = item.id;
-                    });
-                    this.setState({
-                        dataSource: res.data,
-                        count: res.data.length
-                    });
-                }
-            })
+        this.getCategoryData()
     }
-    handleDelete = key => {
-        const dataSource = [...this.state.dataSource];
-        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-    };
-
+    // 添加分类
     handleAdd = () => {
         this.setState({
             visible: true,
-            categoryOrg: 'add'
+            categoryOrg: 'add',
+            categoryName: ''
         });
-    /*    const { count, dataSource } = this.state;
-        const newData = {
-            key: count,
-            name: `Edward King ${count}`,
-            age: 32,
-            address: `London, Park Lane no. ${count}`,
-        };
-        this.setState({
-            dataSource: [...dataSource, newData],
-            count: count + 1,
-        });*/
     };
-
+    // 确定删除分类
     confirmModalOk = () => {
-        fetch('http://localhost:8778/category', {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName + '&_id=' + this.state._id
-        })
-            .then(res => {
-                console.log(res);
-            })
-            .then(res => {
-                console.log(res);
-            })
+       this.setCategoryData();
     };
 
     confirmModalCancel = () => {
@@ -253,15 +109,69 @@ export default  class CategorySysterm  extends Component {
         });
         this.setState({ dataSource: newData });
     };
+    // 获取分类数据
+    getCategoryData = () => {
+        fetch('http://localhost:8778/category')
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                if (res.code === 200) {
+                    res.data.forEach((item, index) => {
+                        item.key = item._id;
+                    });
+                    this.setState({
+                        dataSource: res.data,
+                        count: res.data.length
+                    });
+                }
+            })
+    };
+
+    // 操作分类数据
+    setCategoryData = () => {
+        fetch('http://localhost:8778/category', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName + '&_id=' + this.state._id
+        })
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                if (res.code === 200) {
+                    this.getCategoryData();
+                    showMessage(res.msg, 'success');
+                    switch (this.state.categoryOrg) {
+                        case 'add':
+                            this.setState({
+                                visible: false
+                            });
+                            break;
+                        case 'edit':
+                            this.setState({
+                                visible: false
+                            });
+                            break;
+                        default:
+                            this.setState({
+                                confirmModal: false
+                            });
+                            break;
+                    }
+                } else {
+                    showMessage(res.msg, 'error')
+                }
+            })
+    };
 
     render() {
         const { dataSource } = this.state;
-        const components = {
-            body: {
-                row: EditableFormRow,
-                cell: EditableCell,
-            },
-        };
+        const components = {};
         const columns = this.columns.map(col => {
             if (!col.editable) {
                 return col;
@@ -270,7 +180,6 @@ export default  class CategorySysterm  extends Component {
                 ...col,
                 onCell: record => ({
                     record,
-                    editable: col.editable,
                     dataIndex: col.dataIndex,
                     title: col.title,
                     handleSave: this.handleSave,

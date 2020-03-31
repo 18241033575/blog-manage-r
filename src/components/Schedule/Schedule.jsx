@@ -5,6 +5,7 @@ import './Schedule.css'
 
 function getListData(value) {
     let listData;
+    console.log(value.date());
     switch (value.date()) {
         case 8:
             listData = [
@@ -15,7 +16,7 @@ function getListData(value) {
         case 10:
             listData = [
                 { type: 'warning', content: 'This is warning event.' },
-                { type: 'success', content: 'This is usual event.' },
+                { type: 'success', content: '编辑一个博客成功.' },
                 { type: 'error', content: 'This is error event.' },
             ];
             break;
