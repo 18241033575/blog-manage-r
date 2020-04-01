@@ -1,157 +1,108 @@
 import React, {Component} from 'react';
-import { Table, Input, Button, Popconfirm, Form } from 'antd';
+import { Table, Input, Button, Modal } from 'antd';
+import { showMessage } from '../Untils/untils'
 
-const EditableContext = React.createContext();
+const authName = {
+  5: { name: '网站管理员' },
+  9: { name: '超级管理员' }
+};
 
-const EditableRow = ({ form, index, ...props }) => (
-    <EditableContext.Provider value={form}>
-        <tr {...props} />
-    </EditableContext.Provider>
-);
-
-const EditableFormRow = Form.create()(EditableRow);
-
-class EditableCell extends React.Component {
-    state = {
-        editing: false,
-    };
-
-    toggleEdit = () => {
-        const editing = !this.state.editing;
-        this.setState({ editing }, () => {
-            if (editing) {
-                this.input.focus();
-            }
-        });
-    };
-
-    save = e => {
-        const { record, handleSave } = this.props;
-        this.form.validateFields((error, values) => {
-            if (error && error[e.currentTarget.id]) {
-                return;
-            }
-            this.toggleEdit();
-            handleSave({ ...record, ...values });
-        });
-    };
-
-    renderCell = form => {
-        this.form = form;
-        const { children, dataIndex, record, title } = this.props;
-        const { editing } = this.state;
-        return editing ? (
-            <Form.Item style={{ margin: 0 }}>
-                {form.getFieldDecorator(dataIndex, {
-                    rules: [
-                        {
-                            required: true,
-                            message: `${title} is required.`,
-                        },
-                    ],
-                    initialValue: record[dataIndex],
-                })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
-            </Form.Item>
-        ) : (
-            <div
-                className="editable-cell-value-wrap"
-                style={{ paddingRight: 24 }}
-                onClick={this.toggleEdit}
-            >
-                {children}
-            </div>
-        );
-    };
-
-    render() {
-        const {
-            editable,
-            dataIndex,
-            title,
-            record,
-            index,
-            handleSave,
-            children,
-            ...restProps
-        } = this.props;
-        return (
-            <td {...restProps}>
-                {editable ? (
-                    <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-                ) : (
-                    children
-                )}
-            </td>
-        );
-    }
-}
-
-
-class Administor  extends Component {
+export default  class Administor  extends Component {
     constructor(props) {
         super(props);
         this.columns = [
             {
-                title: 'name',
+                title: 'ID',
+                dataIndex: '_id',
+            },
+            {
+                title: '姓名',
                 dataIndex: 'name',
-                width: '30%',
-                editable: true,
             },
             {
-                title: 'age',
-                dataIndex: 'age',
+                title: '角色名称',
+                dataIndex: 'authName',
+                width: '30%'
             },
             {
-                title: 'address',
-                dataIndex: 'address',
-            },
-            {
-                title: 'operation',
+                title: '操作',
                 dataIndex: 'operation',
                 render: (text, record) =>
-                    this.state.dataSource.length >= 1 ? (
-                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-                            <span>Delete</span>
-                        </Popconfirm>
-                    ) : null,
+                    record.auth === 9 ? null :(
+                        <span>
+                            <span className={'delete'} onClick={this.categoryDel.bind(this, record.value)}>删除</span>
+                        </span>
+                    ),
             },
         ];
 
         this.state = {
-            dataSource: [
-                {
-                    key: '0',
-                    name: 'Edward King 0',
-                    age: '32',
-                    address: 'London, Park Lane no. 0',
-                },
-                {
-                    key: '1',
-                    name: 'Edward King 1',
-                    age: '32',
-                    address: 'London, Park Lane no. 1',
-                },
-            ],
-            count: 2,
+            dataSource: [],
+            count: 0,
+            visible: false,
+            categoryName: '',
+            categoryOrg: 'add',
+            confirmModal: false
         };
-    }
 
-    handleDelete = key => {
-        const dataSource = [...this.state.dataSource];
-        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+    }
+    // 编辑类别
+    categoryEdit = (name, id) => {
+        this.setState({
+            visible: true,
+            categoryName: name,
+            categoryOrg: 'edit',
+            _id : id
+        });
+    };
+    // 删除类别
+    categoryDel = (name) => {
+        this.setState({
+            confirmModal: true,
+            categoryName: name,
+            categoryOrg: 'delete'
+        });
+    };
+    // 取消
+    setModalVisible = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+    // 保存分类
+    setModalVisibleOk = () => {
+        if (this.state.categoryName.trim() === '') {
+            showMessage('类别名称不能为空', 'error');
+            return
+        }
+        this.setCategoryData();
+    };
+    // 动态改变input值
+    onChange = e => {
+        this.setState({
+            categoryName: e.target.value,
+        });
+    };
+    // 初始化请求数据
+    componentWillMount() {
+        this.getCategoryData()
+    }
+    // 添加分类
+    handleAdd = () => {
+        this.setState({
+            visible: true,
+            adminOrg: 'addAdmin',
+            categoryName: ''
+        });
+    };
+    // 确定删除分类
+    confirmModalOk = () => {
+        this.setCategoryData();
     };
 
-    handleAdd = () => {
-        const { count, dataSource } = this.state;
-        const newData = {
-            key: count,
-            name: `Edward King ${count}`,
-            age: 32,
-            address: `London, Park Lane no. ${count}`,
-        };
+    confirmModalCancel = () => {
         this.setState({
-            dataSource: [...dataSource, newData],
-            count: count + 1,
+            confirmModal: false,
         });
     };
 
@@ -165,15 +116,71 @@ class Administor  extends Component {
         });
         this.setState({ dataSource: newData });
     };
+    // 获取分类数据
+    getCategoryData = () => {
+        fetch('http://localhost:8778/administrator')
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                if (res.code === 200) {
+                    console.log(res);
+                    res.data.forEach((item, index) => {
+                        item.key = item._id;
+                        item.authName = authName[item.auth].name
+                    });
+                    this.setState({
+                        dataSource: res.data,
+                        count: res.data.length
+                    });
+                }
+            })
+    };
+
+    // 操作分类数据
+    setCategoryData = () => {
+        fetch('http://localhost:8778/category', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName + '&_id=' + this.state._id
+        })
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                if (res.code === 200) {
+                    this.getCategoryData();
+                    showMessage(res.msg, 'success');
+                    switch (this.state.categoryOrg) {
+                        case 'add':
+                            this.setState({
+                                visible: false
+                            });
+                            break;
+                        case 'edit':
+                            this.setState({
+                                visible: false
+                            });
+                            break;
+                        default:
+                            this.setState({
+                                confirmModal: false
+                            });
+                            break;
+                    }
+                } else {
+                    showMessage(res.msg, 'error')
+                }
+            })
+    };
 
     render() {
         const { dataSource } = this.state;
-        const components = {
-            body: {
-                row: EditableFormRow,
-                cell: EditableCell,
-            },
-        };
+        const components = {};
         const columns = this.columns.map(col => {
             if (!col.editable) {
                 return col;
@@ -182,7 +189,6 @@ class Administor  extends Component {
                 ...col,
                 onCell: record => ({
                     record,
-                    editable: col.editable,
                     dataIndex: col.dataIndex,
                     title: col.title,
                     handleSave: this.handleSave,
@@ -201,8 +207,26 @@ class Administor  extends Component {
                     dataSource={dataSource}
                     columns={columns}
                 />
+                <Modal
+                    title="新增类别"
+                    centered
+                    visible={this.state.visible}
+                    onOk={() => this.setModalVisibleOk(false)}
+                    onCancel={() => this.setModalVisible(false)}
+                >
+                    <Input placeholder="请输入类别名称" allowClear value={this.state.categoryName} onChange={this.onChange} />
+                </Modal>
+                <Modal
+                    title="提示信息"
+                    centered
+                    visible={this.state.confirmModal}
+                    onOk={() => this.confirmModalOk(false)}
+                    onCancel={() => this.confirmModalCancel(false)}
+                >
+                    <p>删除不可恢复，你确定要删除么？</p>
+                </Modal>
             </div>
         );
     }
 }
-export default Administor
+

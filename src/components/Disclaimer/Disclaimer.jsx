@@ -1,8 +1,17 @@
 import React, {Component} from 'react';
 import BraftEditor from 'braft-editor';
+import CodeHighlighter from 'braft-extensions/dist/code-highlighter'
+import HeaderId from 'braft-extensions/dist/header-id'
+
 import 'braft-extensions/dist/code-highlighter.css'
 import 'braft-editor/dist/index.css'
 import './disclaimer.css'
+
+// 配置富文本扩展功能
+BraftEditor.use(HeaderId());
+BraftEditor.use(CodeHighlighter({
+    includeEditors: ['editor-with-code-highlighter'],
+}));
 
 class Disclaimer extends Component {
     state = {
@@ -25,6 +34,7 @@ class Disclaimer extends Component {
                     免责声明
                 </div>
                 <BraftEditor
+                    id="editor-with-code-highlighter"
                     value={editorState}
                     onChange={this.handleChange}
                 />
