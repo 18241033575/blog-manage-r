@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import { Table, Input, Button, Modal } from 'antd';
+import { Table, Input, Button, Modal, Select } from 'antd';
 import { showMessage } from '../Untils/untils'
 
 const authName = {
   5: { name: '网站管理员' },
   9: { name: '超级管理员' }
 };
+
 
 export default  class Administor  extends Component {
     constructor(props) {
@@ -30,7 +31,7 @@ export default  class Administor  extends Component {
                 render: (text, record) =>
                     record.auth === 9 ? null :(
                         <span>
-                            <span className={'delete'} onClick={this.categoryDel.bind(this, record.value)}>删除</span>
+                            <span className={'delete'} onClick={this.categoryDel.bind(this, record._id)}>删除</span>
                         </span>
                     ),
             },
@@ -41,8 +42,11 @@ export default  class Administor  extends Component {
             count: 0,
             visible: false,
             categoryName: '',
-            categoryOrg: 'add',
-            confirmModal: false
+            adminOrg: 'neAdmin',
+            confirmModal: false,
+            deleteUserId: '',
+            selectedUserName: '',
+            OPTIONS : [{name: 'Apples', _id: "1"},{name: 'Nails', _id: "2"},{name: 'Bananas', _id: "3"},{name: 'Helicopters', _id: "4"}]
         };
 
     }
@@ -56,11 +60,11 @@ export default  class Administor  extends Component {
         });
     };
     // 删除类别
-    categoryDel = (name) => {
+    categoryDel = (_id) => {
+        console.log(_id);
         this.setState({
             confirmModal: true,
-            categoryName: name,
-            categoryOrg: 'delete'
+            deleteUserId: _id
         });
     };
     // 取消
@@ -69,19 +73,49 @@ export default  class Administor  extends Component {
             visible: false,
         });
     };
-    // 保存分类
+    // 保存新增管理员
     setModalVisibleOk = () => {
-        if (this.state.categoryName.trim() === '') {
-            showMessage('类别名称不能为空', 'error');
+        if (this.state.selectedUserName.trim() === '') {
+            showMessage('请选择人员', 'error');
             return
         }
-        this.setCategoryData();
-    };
-    // 动态改变input值
-    onChange = e => {
-        this.setState({
-            categoryName: e.target.value,
-        });
+        fetch('http://localhost:8778/administrator', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'type=addAdmin&value='+this.state.categoryName + '&name=' + this.state.selectedUserName
+        })
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                if (res.code === 200) {
+                    console.log(res);
+                    /* switch (this.state.categoryOrg) {
+                         case 'add':
+                             this.setState({
+                                 visible: false
+                             });
+                             break;
+                         case 'edit':
+                             this.setState({
+                                 visible: false
+                             });
+                             break;
+                         default:
+                             this.setState({
+                                 confirmModal: false
+                             });
+                             break;
+                     }*/
+                } else {
+                    showMessage(res.msg, 'error')
+                }
+            })
+        // this.setCategoryData();
     };
     // 初始化请求数据
     componentWillMount() {
@@ -91,13 +125,88 @@ export default  class Administor  extends Component {
     handleAdd = () => {
         this.setState({
             visible: true,
-            adminOrg: 'addAdmin',
-            categoryName: ''
+            adminOrg: 'neAdmin',
+            selectedUserName: ''
         });
+        fetch('http://localhost:8778/administrator', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'type=' + this.state.adminOrg + '&value='+this.state.categoryName + '&name=' + this.state.selectedUserName
+        })
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                if (res.code === 200) {
+                    console.log(res);
+                    this.setState({
+                        OPTIONS: res.data
+                    })
+                   /* switch (this.state.categoryOrg) {
+                        case 'add':
+                            this.setState({
+                                visible: false
+                            });
+                            break;
+                        case 'edit':
+                            this.setState({
+                                visible: false
+                            });
+                            break;
+                        default:
+                            this.setState({
+                                confirmModal: false
+                            });
+                            break;
+                    }*/
+                } else {
+                    showMessage(res.msg, 'error')
+                }
+            })
     };
     // 确定删除分类
     confirmModalOk = () => {
-        this.setCategoryData();
+        // this.setCategoryData();
+        fetch('http://localhost:8778/administrator', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'type=delAdmin&value='+this.state.categoryName + '&_id=' + this.state.deleteUserId
+        })
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                if (res.code === 200) {
+                    console.log(res);
+                    /* switch (this.state.categoryOrg) {
+                         case 'add':
+                             this.setState({
+                                 visible: false
+                             });
+                             break;
+                         case 'edit':
+                             this.setState({
+                                 visible: false
+                             });
+                             break;
+                         default:
+                             this.setState({
+                                 confirmModal: false
+                             });
+                             break;
+                     }*/
+                } else {
+                    showMessage(res.msg, 'error')
+                }
+            })
     };
 
     confirmModalCancel = () => {
@@ -135,6 +244,11 @@ export default  class Administor  extends Component {
                     });
                 }
             })
+    };
+    // 监听改变下拉选择
+    handleChange = selectedUserName => {
+        console.log(selectedUserName);
+        this.setState({ selectedUserName });
     };
 
     // 操作分类数据
@@ -195,6 +309,8 @@ export default  class Administor  extends Component {
                 }),
             };
         });
+
+        const { selectedUserName } = this.state;
         return (
             <div>
                 <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
@@ -214,7 +330,18 @@ export default  class Administor  extends Component {
                     onOk={() => this.setModalVisibleOk(false)}
                     onCancel={() => this.setModalVisible(false)}
                 >
-                    <Input placeholder="请输入类别名称" allowClear value={this.state.categoryName} onChange={this.onChange} />
+                    <Select
+                        placeholder="请选择"
+                        value={selectedUserName}
+                        onChange={this.handleChange}
+                        style={{ width: '100%' }}
+                    >
+                        {this.state.OPTIONS.map(item => (
+                            <Select.Option key={item.name} value={item.name}>
+                                {item.name}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </Modal>
                 <Modal
                     title="提示信息"
