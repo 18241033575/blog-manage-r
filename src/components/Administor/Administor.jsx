@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Table, Input, Button, Modal, Select } from 'antd';
+import { Table, Button, Modal, Select } from 'antd';
 import { showMessage } from '../Untils/untils'
 
 const authName = {
@@ -31,7 +31,7 @@ export default  class Administor  extends Component {
                 render: (text, record) =>
                     record.auth === 9 ? null :(
                         <span>
-                            <span className={'delete'} onClick={this.categoryDel.bind(this, record._id)}>删除</span>
+                            <span className={'delete'} onClick={this.adminDel.bind(this, record._id)}>删除</span>
                         </span>
                     ),
             },
@@ -46,22 +46,12 @@ export default  class Administor  extends Component {
             confirmModal: false,
             deleteUserId: '',
             selectedUserName: '',
-            OPTIONS : [{name: 'Apples', _id: "1"},{name: 'Nails', _id: "2"},{name: 'Bananas', _id: "3"},{name: 'Helicopters', _id: "4"}]
+            OPTIONS : []
         };
 
     }
-    // 编辑类别
-    categoryEdit = (name, id) => {
-        this.setState({
-            visible: true,
-            categoryName: name,
-            categoryOrg: 'edit',
-            _id : id
-        });
-    };
-    // 删除类别
-    categoryDel = (_id) => {
-        console.log(_id);
+    // 删除管理员
+    adminDel = (_id) => {
         this.setState({
             confirmModal: true,
             deleteUserId: _id
@@ -93,35 +83,21 @@ export default  class Administor  extends Component {
             })
             .then(res => {
                 if (res.code === 200) {
-                    console.log(res);
-                    /* switch (this.state.categoryOrg) {
-                         case 'add':
-                             this.setState({
-                                 visible: false
-                             });
-                             break;
-                         case 'edit':
-                             this.setState({
-                                 visible: false
-                             });
-                             break;
-                         default:
-                             this.setState({
-                                 confirmModal: false
-                             });
-                             break;
-                     }*/
+                    showMessage(res.msg, 'success');
+                    this.setState({
+                        visible: false
+                    });
+                    this.getAdminData();
                 } else {
                     showMessage(res.msg, 'error')
                 }
             })
-        // this.setCategoryData();
     };
     // 初始化请求数据
     componentWillMount() {
-        this.getCategoryData()
+        this.getAdminData()
     }
-    // 添加分类
+    // 添加管理员按钮-- 获取非管理员人员
     handleAdd = () => {
         this.setState({
             visible: true,
@@ -142,35 +118,16 @@ export default  class Administor  extends Component {
             })
             .then(res => {
                 if (res.code === 200) {
-                    console.log(res);
                     this.setState({
                         OPTIONS: res.data
                     })
-                   /* switch (this.state.categoryOrg) {
-                        case 'add':
-                            this.setState({
-                                visible: false
-                            });
-                            break;
-                        case 'edit':
-                            this.setState({
-                                visible: false
-                            });
-                            break;
-                        default:
-                            this.setState({
-                                confirmModal: false
-                            });
-                            break;
-                    }*/
                 } else {
                     showMessage(res.msg, 'error')
                 }
             })
     };
-    // 确定删除分类
+    // 确定删除管理员
     confirmModalOk = () => {
-        // this.setCategoryData();
         fetch('http://localhost:8778/administrator', {
             method: 'POST',
             mode: 'cors',
@@ -185,55 +142,30 @@ export default  class Administor  extends Component {
             })
             .then(res => {
                 if (res.code === 200) {
-                    console.log(res);
-                    /* switch (this.state.categoryOrg) {
-                         case 'add':
-                             this.setState({
-                                 visible: false
-                             });
-                             break;
-                         case 'edit':
-                             this.setState({
-                                 visible: false
-                             });
-                             break;
-                         default:
-                             this.setState({
-                                 confirmModal: false
-                             });
-                             break;
-                     }*/
+                    this.setState({
+                        confirmModal: false,
+                    });
+                    this.getAdminData()
                 } else {
                     showMessage(res.msg, 'error')
                 }
             })
     };
-
+    // 删除管理员取消按钮
     confirmModalCancel = () => {
         this.setState({
             confirmModal: false,
         });
     };
 
-    handleSave = row => {
-        const newData = [...this.state.dataSource];
-        const index = newData.findIndex(item => row.key === item.key);
-        const item = newData[index];
-        newData.splice(index, 1, {
-            ...item,
-            ...row,
-        });
-        this.setState({ dataSource: newData });
-    };
-    // 获取分类数据
-    getCategoryData = () => {
+    // 获取管理员数据
+    getAdminData = () => {
         fetch('http://localhost:8778/administrator')
             .then(res => {
                 return res.json()
             })
             .then(res => {
                 if (res.code === 200) {
-                    console.log(res);
                     res.data.forEach((item, index) => {
                         item.key = item._id;
                         item.authName = authName[item.auth].name
@@ -247,50 +179,9 @@ export default  class Administor  extends Component {
     };
     // 监听改变下拉选择
     handleChange = selectedUserName => {
-        console.log(selectedUserName);
         this.setState({ selectedUserName });
     };
 
-    // 操作分类数据
-    setCategoryData = () => {
-        fetch('http://localhost:8778/category', {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName + '&_id=' + this.state._id
-        })
-            .then(res => {
-                return res.json()
-            })
-            .then(res => {
-                if (res.code === 200) {
-                    this.getCategoryData();
-                    showMessage(res.msg, 'success');
-                    switch (this.state.categoryOrg) {
-                        case 'add':
-                            this.setState({
-                                visible: false
-                            });
-                            break;
-                        case 'edit':
-                            this.setState({
-                                visible: false
-                            });
-                            break;
-                        default:
-                            this.setState({
-                                confirmModal: false
-                            });
-                            break;
-                    }
-                } else {
-                    showMessage(res.msg, 'error')
-                }
-            })
-    };
 
     render() {
         const { dataSource } = this.state;
@@ -304,8 +195,7 @@ export default  class Administor  extends Component {
                 onCell: record => ({
                     record,
                     dataIndex: col.dataIndex,
-                    title: col.title,
-                    handleSave: this.handleSave,
+                    title: col.title
                 }),
             };
         });

@@ -38,6 +38,10 @@
     color: #666666;
     border: 1px solid #EAEAEA;
     text-align: center;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    cursor: pointer;
 }
 .me_skills span:hover{
     border: 1px solid #59a4d3;
