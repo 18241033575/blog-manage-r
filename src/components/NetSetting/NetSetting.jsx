@@ -1,105 +1,50 @@
 import React, {Component} from 'react';
-import {Table, Input, Button, Icon} from 'antd';
+import { Table, Input, Button, Modal } from 'antd';
+import { showMessage } from '../Untils/untils'
+import './NetSetting.css'
 
-let userData = [];
+export default  class NetSetting  extends Component {
+    constructor(props) {
+        super(props);
+        this.columns = [
+            {
+                title: 'ID',
+                dataIndex: '_id',
+            },
+            {
+                title: '设置键名',
+                dataIndex: 'keyName',
+            },
+            {
+                title: '设置名称',
+                dataIndex: 'value',
+                width: '30%'
+            },
+            {
+                title: '操作',
+                dataIndex: 'operation',
+                render: (text, record) =>
+                    (
+                        <span>
+                            <span className={'edit'} onClick={this.categoryEdit.bind(this, record.value, record._id)}>编辑</span>
+                            <span className={'delete'} onClick={this.categoryDel.bind(this, record.value)}>删除</span>
+                        </span>
+                    ),
+            },
+        ];
 
-export default class NetSetting extends Component {
+        this.state = {
+            dataSource: [],
+            count: 0,
+            visible: false,
+            categoryName: '',
+            categoryOrg: 'add',
+            confirmModal: false
+        };
 
-    componentDidMount() {
-        fetch('http://localhost:8778/netSetting')
-            .then(res => {
-                return res.json()
-            })
-            .then((res) => {
-                if (res.code === 200) {
-                    res.data.forEach((item, index) => {
-                        item.key = item.id;
-                    });
-                    userData = res.data;
-                    console.log(userData);
-                }
-                this.setState({
-                    loading: true
-                })
-            })
-            .catch((err) => {
-
-            });
     }
-
-    state = {
-        selectedRowKeys: [], // Check here to configure the default column
-        searchText: '',
-        title: '测试',
-        loading: false
-    };
-
-    onSelectChange = selectedRowKeys => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
-        this.setState({selectedRowKeys});
-    };
-    getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
-            <div style={{padding: 8}}>
-                <Input
-                    ref={node => {
-                        this.searchInput = node;
-                    }}
-                    placeholder={`Search ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-                    style={{width: 188, marginBottom: 8, display: 'block'}}
-                />
-                <Button
-                    type="primary"
-                    onClick={() => this.handleSearch(selectedKeys, confirm)}
-                    icon="search"
-                    size="small"
-                    style={{width: 90, marginRight: 8}}
-                >
-                    Search
-                </Button>
-                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{width: 90}}>
-                    Reset
-                </Button>
-            </div>
-        ),
-        filterIcon: filtered => (
-            <Icon type="search" style={{color: filtered ? '#1890ff' : undefined}}/>
-        ),
-        onFilter: (value, record) =>
-            record[dataIndex]
-                .toString()
-                .toLowerCase()
-                .includes(value.toLowerCase()),
-        onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-                setTimeout(() => this.searchInput.select());
-            }
-        },
-        /*  render: text => (
-              <Highlighter
-                  highlightStyle={{backgroundColor: '#ffc069', padding: 0}}
-                  searchWords={[this.state.searchText]}
-                  autoEscape
-                  textToHighlight={text.toString()}
-              />
-          ),*/
-    });
-
-    handleSearch = (selectedKeys, confirm) => {
-        confirm();
-        this.setState({searchText: selectedKeys[0]});
-    };
-
-    handleReset = clearFilters => {
-        clearFilters();
-        this.setState({searchText: ''});
-    };
     // 编辑类别
     categoryEdit = (name, id) => {
-        console.log(name);
         this.setState({
             visible: true,
             categoryName: name,
@@ -115,103 +60,168 @@ export default class NetSetting extends Component {
             categoryOrg: 'delete'
         });
     };
-    render() {
-        const columns = [
-            {
-                title: '用户名',
-                dataIndex: 'name',
-                sorter: (a, b) => a.name.length - b.name.length,
-                filters: [
-                    {
-                        text: 'Joe',
-                        value: 'Joe',
-                    },
-                    {
-                        text: 'Jim',
-                        value: 'Jim',
-                    },
-                    {
-                        text: 'Submenu',
-                        value: 'Submenu',
-                        children: [
-                            {
-                                text: 'Green',
-                                value: 'Green',
-                            },
-                            {
-                                text: 'Black',
-                                value: 'Black',
-                            },
-                        ],
-                    }],
-                onFilter: (value, record) => record.name.indexOf(value) === 0,
-            },
-            {
-                title: '字段名',
-                dataIndex: 'keyName',
-            },
-            {
-                title: '设置参数值',
-                dataIndex: 'value',
-            },
-            {
-                title: '操作',
-                dataIndex: 'operation',
-                render: (text, record) =>
-                    userData.length >= 1 ? (
-                        <span>
-                            <span onClick={this.categoryEdit.bind(this, record.value, record._id)}>冻结</span>
-                            <span onClick={this.categoryDel.bind(this, record.value)}>解冻</span>
-                        </span>
-                    ) : null,
-            }
-        ];
+    // 取消
+    setModalVisible = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+    // 保存分类
+    setModalVisibleOk = () => {
+        if (this.state.categoryName.trim() === '') {
+            showMessage('类别名称不能为空', 'error');
+            return
+        }
+        this.setCategoryData();
+    };
+    // 动态改变input值
+    onChange = e => {
+        this.setState({
+            categoryName: e.target.value,
+        });
+    };
+    // 初始化请求数据
+    componentWillMount() {
+        this.getCategoryData()
+    }
+    // 添加分类
+    handleAdd = () => {
+        this.setState({
+            visible: true,
+            categoryOrg: 'add',
+            categoryName: ''
+        });
+    };
+    // 确定删除分类
+    confirmModalOk = () => {
+        this.setCategoryData();
+    };
 
-        const {selectedRowKeys} = this.state;
-        const rowSelection = {
-            selectedRowKeys,
-            onChange: this.onSelectChange,
-            hideDefaultSelections: true,
-            selections: [
-                {
-                    key: 'all-data',
-                    text: 'Select All Data',
-                    onSelect: () => {
-                        this.setState({
-                            selectedRowKeys: [...Array(46).keys()], // 0...45
-                        });
-                    },
-                },
-                {
-                    key: 'odd',
-                    text: 'Select Odd Row',
-                    onSelect: changableRowKeys => {
-                        let newSelectedRowKeys = [];
-                        newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-                            if (index % 2 !== 0) {
-                                return false;
-                            }
-                            return true;
-                        });
-                        this.setState({selectedRowKeys: newSelectedRowKeys});
-                    },
-                },
-                {
-                    key: 'even',
-                    text: 'Select Even Row',
-                    onSelect: changableRowKeys => {
-                        let newSelectedRowKeys = [];
-                        newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-                            if (index % 2 !== 0) {
-                                return true;
-                            }
-                            return false;
-                        });
-                        this.setState({selectedRowKeys: newSelectedRowKeys});
-                    },
-                },
-            ],
-        };
-        return (this.state.loading &&  <Table title={this.title} rowSelection={rowSelection} columns={columns} dataSource={userData}/>);
+    confirmModalCancel = () => {
+        this.setState({
+            confirmModal: false,
+        });
+    };
+
+    handleSave = row => {
+        const newData = [...this.state.dataSource];
+        const index = newData.findIndex(item => row.key === item.key);
+        const item = newData[index];
+        newData.splice(index, 1, {
+            ...item,
+            ...row,
+        });
+        this.setState({ dataSource: newData });
+    };
+    // 获取分类数据
+    getCategoryData = () => {
+        fetch('http://localhost:8778/netSetting')
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                if (res.code === 200) {
+                    res.data.forEach((item, index) => {
+                        item.key = item._id;
+                    });
+                    this.setState({
+                        dataSource: res.data,
+                        count: res.data.length
+                    });
+                }
+            })
+    };
+
+    // 操作分类数据
+    setCategoryData = () => {
+        fetch('http://localhost:8778/netSetting', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName + '&_id=' + this.state._id
+        })
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                if (res.code === 200) {
+                    this.getCategoryData();
+                    showMessage(res.msg, 'success');
+                    switch (this.state.categoryOrg) {
+                        case 'add':
+                            this.setState({
+                                visible: false
+                            });
+                            break;
+                        case 'edit':
+                            this.setState({
+                                visible: false
+                            });
+                            break;
+                        default:
+                            this.setState({
+                                confirmModal: false
+                            });
+                            break;
+                    }
+                } else {
+                    showMessage(res.msg, 'error')
+                }
+            })
+    };
+
+    render() {
+        const { dataSource } = this.state;
+        const components = {};
+        const columns = this.columns.map(col => {
+            if (!col.editable) {
+                return col;
+            }
+            return {
+                ...col,
+                onCell: record => ({
+                    record,
+                    dataIndex: col.dataIndex,
+                    title: col.title,
+                    handleSave: this.handleSave,
+                }),
+            };
+        });
+        return (
+            <div>
+                <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
+                    新增设置
+                </Button>
+                <Table
+                    components={components}
+                    rowClassName={() => 'editable-row'}
+                    bordered
+                    dataSource={dataSource}
+                    columns={columns}
+                />
+                <Modal
+                    title="新增类别"
+                    centered
+                    visible={this.state.visible}
+                    onOk={() => this.setModalVisibleOk(false)}
+                    onCancel={() => this.setModalVisible(false)}
+                >
+                    <Input placeholder="请输入类别名称" allowClear value={this.state.categoryName} onChange={this.onChange} />
+                </Modal>
+                <Modal
+                    title="提示信息"
+                    centered
+                    visible={this.state.confirmModal}
+                    onOk={() => this.confirmModalOk(false)}
+                    onCancel={() => this.confirmModalCancel(false)}
+                >
+                    <p>删除不可恢复，你确定要删除么？</p>
+                </Modal>
+            </div>
+        );
     }
 }
+
