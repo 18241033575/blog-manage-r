@@ -53,13 +53,10 @@ export default class Index extends Component {
     };
 
     componentWillMount() {
-        // 暂时做简单登录处理 -- 安全性低
         // 处理思路：拿到账号和密码请求后台，通过给登录状态
-        let userInfo = localStorage.getItem('USER');
-        userInfo ? this.setState({isLogin: true}) : this.setState({isLogin: false});
-        // this.props.history.push('/Login')
-        console.log(window.location);
-        // window.location.href = '/Login'
+        let userInfo = JSON.parse(localStorage.getItem('USER'));
+        // 登陆过期时间3天
+        userInfo && (new Date().getTime() - userInfo.validityDate) < 3 * 24 * 3600 * 1000 ? this.setState({isLogin: true}) : this.setState({isLogin: false});
     }
 
     loginState = (state) => {

@@ -12,38 +12,43 @@ export default class Login  extends PureComponent {
         this.state = {
             username: '',
             password: '',
-            confirmPassword: ''
+            validityDate: ''
         };
     }
+    // 登陆
     toLogin = () => {
-        // application/x-www-form-urlencoded', }, body: 'key1=value1&key2=value2'
-        fetch('http://localhost:8888/login', {
+        if (this.state.username.trim() === '') {
+            showMessage('账号不能为空', 'error');
+            return
+        }
+        if (this.state.password.trim() === '') {
+            showMessage('密码不能为空', 'error');
+            return
+        }
+        fetch('http://localhost:8778/login', {
             method: 'POST',
             mode: 'cors',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            // body: JSON.stringify(params)
             body: 'username='+this.state.username + '&password='+this.state.password
         }).then((res) => {
                 return res.json()
         }).then(res => {
             if (res.code === 200) {
+                res.data.validityDate = new Date().getTime();
                 showMessage(res.msg, 'success', 2, () => {
-                    localStorage.setItem('USER', JSON.stringify(this.state));
+                    localStorage.setItem('USER', JSON.stringify(res.data));
                     window.location.href = '/'
                 });
             } else {
                 showMessage(res.msg, 'error')
             }
-        }).catch((err) => {
-            alert(err)
         })
-        // localStorage.setItem('USER', JSON.stringify(this.state));
-        // this.props.getLogin(true)
     };
 
+    // 去注册
     toRegister = () => {
         this.props.changeLogin(false)
     };

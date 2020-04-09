@@ -16,7 +16,7 @@ export default  class NetSetting  extends Component {
                 dataIndex: 'keyName',
             },
             {
-                title: '设置名称',
+                title: '设置键值',
                 dataIndex: 'value',
                 width: '30%'
             },
@@ -26,8 +26,8 @@ export default  class NetSetting  extends Component {
                 render: (text, record) =>
                     (
                         <span>
-                            <span className={'edit'} onClick={this.categoryEdit.bind(this, record.value, record._id)}>编辑</span>
-                            <span className={'delete'} onClick={this.categoryDel.bind(this, record.value)}>删除</span>
+                            <span className={'edit'} onClick={this.setEdit.bind(this, record.keyName, record.value, record._id)}>编辑</span>
+                            <span className={'delete'} onClick={this.categoryDel.bind(this, record._id)}>删除</span>
                         </span>
                     ),
             },
@@ -37,27 +37,29 @@ export default  class NetSetting  extends Component {
             dataSource: [],
             count: 0,
             visible: false,
-            categoryName: '',
-            categoryOrg: 'add',
+            keyName: '',
+            value: '',
+            netOrg: 'add',
             confirmModal: false
         };
 
     }
     // 编辑类别
-    categoryEdit = (name, id) => {
+    setEdit = (keyName, value, id) => {
         this.setState({
             visible: true,
-            categoryName: name,
-            categoryOrg: 'edit',
-            _id : id
+            keyName: keyName || '',
+            value: value || '',
+            netOrg: 'edit',
+            _id: id
         });
     };
     // 删除类别
-    categoryDel = (name) => {
+    categoryDel = (id) => {
         this.setState({
             confirmModal: true,
-            categoryName: name,
-            categoryOrg: 'delete'
+            _id: id,
+            netOrg: 'delete'
         });
     };
     // 取消
@@ -68,33 +70,44 @@ export default  class NetSetting  extends Component {
     };
     // 保存分类
     setModalVisibleOk = () => {
-        if (this.state.categoryName.trim() === '') {
-            showMessage('类别名称不能为空', 'error');
+        if (this.state.keyName.trim() === '') {
+            showMessage('设置键名不能为空', 'error');
             return
         }
-        this.setCategoryData();
+        if (this.state.value.trim() === '') {
+            showMessage('设置键值不能为空', 'error');
+            return
+        }
+        this.setNetData();
     };
-    // 动态改变input值
-    onChange = e => {
+    // 动态改变input值 -- key
+    onChangeKey = e => {
         this.setState({
-            categoryName: e.target.value,
+            keyName: e.target.value,
+        });
+    };
+    // 动态改变input值 -- value
+    onChangeVal = e => {
+        this.setState({
+            value: e.target.value,
         });
     };
     // 初始化请求数据
     componentWillMount() {
-        this.getCategoryData()
+        this.getSetData()
     }
     // 添加分类
     handleAdd = () => {
         this.setState({
             visible: true,
-            categoryOrg: 'add',
-            categoryName: ''
+            netOrg: 'add',
+            keyName: '',
+            value: ''
         });
     };
     // 确定删除分类
     confirmModalOk = () => {
-        this.setCategoryData();
+        this.setNetData();
     };
 
     confirmModalCancel = () => {
@@ -114,7 +127,7 @@ export default  class NetSetting  extends Component {
         this.setState({ dataSource: newData });
     };
     // 获取分类数据
-    getCategoryData = () => {
+    getSetData = () => {
         fetch('http://localhost:8778/netSetting')
             .then(res => {
                 return res.json()
@@ -132,8 +145,8 @@ export default  class NetSetting  extends Component {
             })
     };
 
-    // 操作分类数据
-    setCategoryData = () => {
+    // 操作设置数据
+    setNetData = () => {
         fetch('http://localhost:8778/netSetting', {
             method: 'POST',
             mode: 'cors',
@@ -141,16 +154,16 @@ export default  class NetSetting  extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName + '&_id=' + this.state._id
+            body: 'type=' + this.state.netOrg + '&keyName='+this.state.keyName + '&value=' + this.state.value + '&_id=' + this.state._id
         })
             .then(res => {
                 return res.json()
             })
             .then(res => {
                 if (res.code === 200) {
-                    this.getCategoryData();
+                    this.getSetData();
                     showMessage(res.msg, 'success');
-                    switch (this.state.categoryOrg) {
+                    switch (this.state.netOrg) {
                         case 'add':
                             this.setState({
                                 visible: false
@@ -203,13 +216,14 @@ export default  class NetSetting  extends Component {
                     columns={columns}
                 />
                 <Modal
-                    title="新增类别"
+                    title="新增设置"
                     centered
                     visible={this.state.visible}
                     onOk={() => this.setModalVisibleOk(false)}
                     onCancel={() => this.setModalVisible(false)}
                 >
-                    <Input placeholder="请输入类别名称" allowClear value={this.state.categoryName} onChange={this.onChange} />
+                    <Input placeholder="请输入设置键名" allowClear value={this.state.keyName} onChange={this.onChangeKey} />
+                    <Input style={{ marginTop: 10 }} placeholder="请输入设置键值" allowClear value={this.state.value} onChange={this.onChangeVal} />
                 </Modal>
                 <Modal
                     title="提示信息"
