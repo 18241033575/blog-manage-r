@@ -1,6 +1,18 @@
 import React, {Component} from 'react';
-import { Table, Input, Button, Modal } from 'antd';
+import { Table, Input, Button, Modal, Select } from 'antd';
+import BraftEditor from 'braft-editor';
 import { showMessage } from '../Untils/untils'
+import CodeHighlighter from 'braft-extensions/dist/code-highlighter'
+import HeaderId from 'braft-extensions/dist/header-id'
+import './ArticleList.css'
+
+const { Option } = Select;
+
+// 配置富文本扩展功能
+BraftEditor.use(HeaderId());
+BraftEditor.use(CodeHighlighter({
+    includeEditors: ['editor-with-code-highlighter'],
+}));
 
 export default  class ArticleList  extends Component {
     constructor(props) {
@@ -26,8 +38,8 @@ export default  class ArticleList  extends Component {
                 render: (text, record) =>
                     (
                         <span>
-                            <span className={'edit'} onClick={this.categoryEdit.bind(this, record.value, record._id)}>编辑</span>
-                            <span className={'delete'} onClick={this.categoryDel.bind(this, record.value)}>删除</span>
+                            <span className={'edit'} onClick={this.articleEdit.bind(this, record.title, record._id, record.tags, record.content)}>编辑</span>
+                            <span className={'delete'} onClick={this.articleDel.bind(this, record.title)}>删除</span>
                         </span>
                     ),
             },
@@ -37,27 +49,44 @@ export default  class ArticleList  extends Component {
             dataSource: [],
             count: 0,
             visible: false,
-            categoryName: '',
-            categoryOrg: 'add',
-            confirmModal: false
+            articleTitle: '',
+            tags: [],
+            articleOrg: 'add',
+            confirmModal: false,
+            editorState: '', // 设置编辑器初始内容
+            outputHTML: '',
+            readOnly: true,
+            operateTitle: '新增文章',
+            children: [],
+            defaultTags: []
         };
 
     }
-    // 编辑类别
-    categoryEdit = (name, id) => {
-        this.setState({
-            visible: true,
-            categoryName: name,
-            categoryOrg: 'edit',
-            _id : id
-        });
+    // 编辑文章
+    articleEdit = (title, id, tags, content) => {
+
+        setTimeout(() => {
+            this.setState({
+                operateTitle: '编辑文章',
+                visible: true,
+                _id : id,
+                articleTitle: title,
+                defaultTags: [...tags.split(',')],
+                tags: [...tags.split(',')],
+                editorState: BraftEditor.createEditorState(content),
+                outputHTML: content,
+                articleOrg: 'edit',
+            });
+            console.log(this.state.defaultTags);
+            console.log(this.state.tags);
+        })
     };
-    // 删除类别
-    categoryDel = (name) => {
+    // 删除文章
+    articleDel = (title) => {
         this.setState({
             confirmModal: true,
-            categoryName: name,
-            categoryOrg: 'delete'
+            articleTitle: title,
+            articleOrg: 'delete'
         });
     };
     // 取消
@@ -68,40 +97,62 @@ export default  class ArticleList  extends Component {
     };
     // 保存分类
     setModalVisibleOk = () => {
-        if (this.state.categoryName.trim() === '') {
-            showMessage('类别名称不能为空', 'error');
+        if (this.state.articleTitle.trim() === '') {
+            showMessage('文章标题不能为空', 'error');
             return
         }
-        this.setCategoryData();
+        this.setArticleData();
     };
     // 动态改变input值
     onChange = e => {
         this.setState({
-            categoryName: e.target.value,
+            articleTitle: e.target.value,
         });
     };
     // 初始化请求数据
     componentWillMount() {
-        this.getArticleData()
+        this.getArticleData();
+        this.getCategoryData()
     }
     // 添加分类
     handleAdd = () => {
         this.setState({
+            operateTitle: '新增文章',
             visible: true,
-            categoryOrg: 'add',
-            categoryName: ''
+            articleOrg: 'add',
+            articleTitle: '',
+            editorState: BraftEditor.createEditorState(''),
+            defaultTags: [],
+            tags: []
         });
+        console.log(this.state.defaultTags);
+        console.log(this.state.tags);
     };
     // 确定删除分类
     confirmModalOk = () => {
-        this.setCategoryData();
+        this.setArticleData();
     };
-
+    // 取消删除
     confirmModalCancel = () => {
         this.setState({
             confirmModal: false,
         });
     };
+    // 监听标签变化
+    tagsChange = (e) => {
+        console.log(e);
+        this.setState({
+            tags: e
+        })
+    };
+    // 富文本动态赋值
+    editorChange = (editorState) => {
+        this.setState({
+            editorState: editorState,
+            outputHTML: editorState.toHTML()
+        })
+    };
+
 
     handleSave = row => {
         const newData = [...this.state.dataSource];
@@ -114,6 +165,29 @@ export default  class ArticleList  extends Component {
         this.setState({ dataSource: newData });
     };
     // 获取分类数据
+    getCategoryData = () => {
+        fetch('http://localhost:8778/category')
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                if (res.code === 200) {
+
+                    for (let i = 0; i < res.data.length; i++) {
+                        this.state.children.push(<Option key={ res.data[i].value }>{ res.data[i].value }</Option>);
+                    }
+                    console.log(res);
+                    /* res.data.forEach((item, index) => {
+                         item.key = item._id;
+                     });*/
+                   /* this.setState({
+                        dataSource: res.data,
+                        count: res.data.length
+                    });*/
+                }
+            })
+    };
+    // 获取文章数据
     getArticleData = () => {
         fetch('http://localhost:8778/articles')
             .then(res => {
@@ -133,7 +207,7 @@ export default  class ArticleList  extends Component {
     };
 
     // 操作文章数据
-    setCategoryData = () => {
+    setArticleData = () => {
         fetch('http://localhost:8778/articles', {
             method: 'POST',
             mode: 'cors',
@@ -141,16 +215,17 @@ export default  class ArticleList  extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: 'type=' + this.state.categoryOrg + '&value='+this.state.categoryName + '&_id=' + this.state._id
+            body: 'type=' + this.state.articleOrg + '&title='+this.state.articleTitle
+            + '&_id=' + this.state._id + '&tags=' + this.state.tags.join(',') + '&content=' + this.state.outputHTML
         })
             .then(res => {
                 return res.json()
             })
             .then(res => {
                 if (res.code === 200) {
-                    this.getCategoryData();
+                    this.getArticleData();
                     showMessage(res.msg, 'success');
-                    switch (this.state.categoryOrg) {
+                    switch (this.state.articleOrg) {
                         case 'add':
                             this.setState({
                                 visible: false
@@ -176,6 +251,7 @@ export default  class ArticleList  extends Component {
     render() {
         const { dataSource } = this.state;
         const components = {};
+        const {editorState, outputHTML, operateTitle, children, defaultTags} = this.state;
         const columns = this.columns.map(col => {
             if (!col.editable) {
                 return col;
@@ -203,14 +279,35 @@ export default  class ArticleList  extends Component {
                     columns={columns}
                 />
                 <Modal
-                    title="新增类别"
+                    title={operateTitle}
                     centered
+                    width={'60%'}
                     visible={this.state.visible}
                     onOk={() => this.setModalVisibleOk(false)}
                     onCancel={() => this.setModalVisible(false)}
                 >
-                    <Input placeholder="请输入类别名称" allowClear value={this.state.categoryName} onChange={this.onChange} />
+                    <div className="title">
+                        <span>标 题:</span><Input placeholder="请输入标题名称" allowClear  style={{ width: '40%' }} value={this.state.articleTitle} onChange={this.onChange} />
+                    </div>
+                    <div className="tags">
+                        <span>标 签:</span>
+                        <Select
+                            mode="multiple"
+                            style={{ width: '40%' }}
+                            placeholder="请选择标签"
+                            defaultValue={defaultTags}
+                            onChange={this.tagsChange}
+                        >
+                            {children}
+                        </Select>
+                    </div>
+                    <BraftEditor
+                        id="editor-with-code-highlighter"
+                        value={editorState}
+                        onChange={this.editorChange}
+                    />
                 </Modal>
+
                 <Modal
                     title="提示信息"
                     centered

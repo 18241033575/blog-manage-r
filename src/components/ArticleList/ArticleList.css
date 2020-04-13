@@ -1,0 +1,25 @@
+.title {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.title span {
+    display: inline-block;
+    min-width: 60px;
+    line-height: 32px;
+}
+
+.tags {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.tags span {
+    display: inline-block;
+    min-width: 60px;
+    line-height: 32px;
+}
+
+#bf-container {
+    border: 1px solid #eee;
+}
