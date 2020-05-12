@@ -4,6 +4,8 @@ import BraftEditor from 'braft-editor';
 import { showMessage } from '../Untils/untils'
 import CodeHighlighter from 'braft-extensions/dist/code-highlighter'
 import HeaderId from 'braft-extensions/dist/header-id'
+import store from '../../store/index'
+
 import './ArticleList.css'
 
 const { Option } = Select;
@@ -17,6 +19,10 @@ BraftEditor.use(CodeHighlighter({
 export default  class ArticleList  extends Component {
     constructor(props) {
         super(props);
+        console.log(store.getState());
+        this.storeChange = this.storeChange.bind(this);  //转变this指向
+        store.subscribe(this.storeChange);
+
         this.columns = [
             {
                 title: 'ID',
@@ -25,7 +31,11 @@ export default  class ArticleList  extends Component {
             {
                 title: '文章名称',
                 dataIndex: 'title',
-                width: '30%'
+                // width: '30%'
+            },
+            {
+                title: '简介',
+                dataIndex: 'intro',
             },
             {
                 title: '所属标签',
@@ -38,7 +48,7 @@ export default  class ArticleList  extends Component {
                 render: (text, record) =>
                     (
                         <span>
-                            <span className={'edit'} onClick={this.articleEdit.bind(this, record.title, record._id, record.tags, record.content)}>编辑</span>
+                            <span className={'edit'} onClick={this.articleEdit.bind(this, record.title, record._id, record.tags, record.content, record.intro)}>编辑</span>
                             <span className={'delete'} onClick={this.articleDel.bind(this, record.title)}>删除</span>
                         </span>
                     ),
@@ -58,12 +68,17 @@ export default  class ArticleList  extends Component {
             readOnly: true,
             operateTitle: '新增文章',
             children: [],
-            defaultTags: []
+            defaultTags: [],
+            articleIntro: ''
         };
 
     }
+    storeChange(){
+        this.setState(store.getState());
+        console.log(store.getState());
+    }
     // 编辑文章
-    articleEdit = (title, id, tags, content) => {
+    articleEdit = (title, id, tags, content, intro) => {
 
         setTimeout(() => {
             this.setState({
@@ -71,6 +86,7 @@ export default  class ArticleList  extends Component {
                 visible: true,
                 _id : id,
                 articleTitle: title,
+                articleIntro: intro,
                 defaultTags: [...tags.split(',')],
                 tags: [...tags.split(',')],
                 editorState: BraftEditor.createEditorState(content),
@@ -109,6 +125,12 @@ export default  class ArticleList  extends Component {
             articleTitle: e.target.value,
         });
     };
+    // 改变intro值
+    onIntroChange = e=> {
+        this.setState({
+            articleIntro: e.target.value
+        })
+    };
     // 初始化请求数据
     componentWillMount() {
         this.getArticleData();
@@ -121,10 +143,16 @@ export default  class ArticleList  extends Component {
             visible: true,
             articleOrg: 'add',
             articleTitle: '',
+            articleIntro: '',
             editorState: BraftEditor.createEditorState(''),
             defaultTags: [],
             tags: []
         });
+        const action = {
+          type: 'change_input_value',
+          value: '测试测试'
+        };
+        store.dispatch(action);
         console.log(this.state.defaultTags);
         console.log(this.state.tags);
     };
@@ -176,14 +204,6 @@ export default  class ArticleList  extends Component {
                     for (let i = 0; i < res.data.length; i++) {
                         this.state.children.push(<Option key={ res.data[i].value }>{ res.data[i].value }</Option>);
                     }
-                    console.log(res);
-                    /* res.data.forEach((item, index) => {
-                         item.key = item._id;
-                     });*/
-                   /* this.setState({
-                        dataSource: res.data,
-                        count: res.data.length
-                    });*/
                 }
             })
     };
@@ -198,6 +218,7 @@ export default  class ArticleList  extends Component {
                     res.data.forEach((item, index) => {
                         item.key = item._id;
                     });
+                    console.log(res.data);
                     this.setState({
                         dataSource: res.data,
                         count: res.data.length
@@ -216,7 +237,7 @@ export default  class ArticleList  extends Component {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: 'type=' + this.state.articleOrg + '&title='+this.state.articleTitle
-            + '&_id=' + this.state._id + '&tags=' + this.state.tags.join(',') + '&content=' + this.state.outputHTML
+            + '&_id=' + this.state._id + '&tags=' + this.state.tags.join(',') + '&content=' + this.state.outputHTML + '&intro=' + this.state.articleIntro
         })
             .then(res => {
                 return res.json()
@@ -288,6 +309,9 @@ export default  class ArticleList  extends Component {
                 >
                     <div className="title">
                         <span>标 题:</span><Input placeholder="请输入标题名称" allowClear  style={{ width: '40%' }} value={this.state.articleTitle} onChange={this.onChange} />
+                    </div>
+                    <div className="title">
+                        <span>简 介:</span><Input placeholder="请输入简介" allowClear  style={{ width: '40%' }} value={this.state.articleIntro} onChange={this.onIntroChange} />
                     </div>
                     <div className="tags">
                         <span>标 签:</span>
