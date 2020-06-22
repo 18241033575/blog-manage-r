@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Table, Input, Button, Modal, Select } from 'antd';
+import { Table, Input, Button, Modal, Select, Switch } from 'antd';
 import BraftEditor from 'braft-editor';
 import { showMessage } from '../Untils/untils'
 import CodeHighlighter from 'braft-extensions/dist/code-highlighter'
@@ -48,7 +48,7 @@ export default  class ArticleList  extends Component {
                 render: (text, record) =>
                     (
                         <span>
-                            <span className={'edit'} onClick={this.articleEdit.bind(this, record.title, record._id, record.tags, record.content, record.intro)}>编辑</span>
+                            <span className={'edit'} onClick={this.articleEdit.bind(this, record)}>编辑</span>
                             <span className={'delete'} onClick={this.articleDel.bind(this, record.title)}>删除</span>
                         </span>
                     ),
@@ -69,7 +69,8 @@ export default  class ArticleList  extends Component {
             operateTitle: '新增文章',
             children: [],
             defaultTags: [],
-            articleIntro: ''
+            articleIntro: '',
+            hot: true
         };
 
     }
@@ -78,20 +79,21 @@ export default  class ArticleList  extends Component {
         console.log(store.getState());
     }
     // 编辑文章
-    articleEdit = (title, id, tags, content, intro) => {
+    articleEdit = (record) => {
 
         setTimeout(() => {
             this.setState({
                 operateTitle: '编辑文章',
                 visible: true,
-                _id : id,
-                articleTitle: title,
-                articleIntro: intro,
-                defaultTags: [...tags.split(',')],
-                tags: [...tags.split(',')],
-                editorState: BraftEditor.createEditorState(content),
-                outputHTML: content,
+                _id : record._id,
+                articleTitle: record.title,
+                articleIntro: record.intro,
+                defaultTags: [...record.tags.split(',')],
+                tags: [...record.tags.split(',')],
+                editorState: BraftEditor.createEditorState(record.content),
+                outputHTML: record.content,
                 articleOrg: 'edit',
+                hot: record.hot
             });
             console.log(this.state.defaultTags);
             console.log(this.state.tags);
@@ -192,6 +194,12 @@ export default  class ArticleList  extends Component {
         });
         this.setState({ dataSource: newData });
     };
+
+    onToggleHot = ()=> {
+        this.setState({
+            hot: !this.state.hot
+        })
+    }
     // 获取分类数据
     getCategoryData = () => {
         fetch('http://localhost:8778/category')
@@ -237,7 +245,7 @@ export default  class ArticleList  extends Component {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: 'type=' + this.state.articleOrg + '&title='+this.state.articleTitle
-            + '&_id=' + this.state._id + '&tags=' + this.state.tags.join(',') + '&content=' + this.state.outputHTML + '&intro=' + this.state.articleIntro
+            + '&_id=' + this.state._id + '&tags=' + this.state.tags.join(',') + '&content=' + this.state.outputHTML + '&intro=' + this.state.articleIntro+ '&hot=' + this.state.hot
         })
             .then(res => {
                 return res.json()
@@ -324,6 +332,9 @@ export default  class ArticleList  extends Component {
                         >
                             {children}
                         </Select>
+                    </div>
+                    <div className="title">
+                        <span>热 门:</span><Switch checked={this.state.hot} onChange={this.onToggleHot.bind(this)} />
                     </div>
                     <BraftEditor
                         id="editor-with-code-highlighter"

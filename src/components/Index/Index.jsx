@@ -232,7 +232,7 @@ export default class Index extends Component {
                                             >
                                                 <Menu.Item key="12">
                                                     <NavLink exact to={'/myset/basemsg'}>
-                                                        基本资料
+                                                        关于我的
                                                     </NavLink>
                                                 </Menu.Item>
                                                 <Menu.Item key="13">

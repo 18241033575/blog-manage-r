@@ -1,6 +1,12 @@
 .title {
     display: flex;
+    align-items: center;
     margin-bottom: 10px;
+}
+
+.title button {
+    display: inline-block;
+    width: 40px;
 }
 
 .title span {
