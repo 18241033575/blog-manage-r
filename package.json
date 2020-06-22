@@ -19,7 +19,7 @@
     "react-particles": "0.0.3",
     "react-particles-js": "^2.7.0",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^3.4.1",
     "react-transition-group": "^4.2.1",
     "redux": "^4.0.5"
   },
